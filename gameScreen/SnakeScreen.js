@@ -1,75 +1,194 @@
-import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
+import React from 'react'
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from 'react-native'
 import Snake from '../components/Snake/snake'
 import Food from '../components/Snake/food'
 
-const ScreenWidth = Dimensions.get('screen').width
-const ScreenHeight = Dimensions.get('screen').height
+const GRID_SIZE = 15
+const CELL_SIZE = 20
+const BOARD_SIZE = GRID_SIZE * CELL_SIZE
 
 const randomFood = () => {
-  let max = 21, min = 1;
-  let x = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
-  let y = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
-  return [x, y];
+  let max = 18,
+    min = 1
+  let x = Math.floor((Math.random() * (max - min + 1) + min) / 5) * 5
+  let y = Math.floor((Math.random() * (max - min + 1) + min) / 5) * 5
+  return [x, y]
 }
 
-export default function SnakeScreen(){
-  const [snakeDots, setSnakeDots] = useState([
+const initialState = {
+  snakeDots: [
     [0, 0],
-    [4, 0]
-  ])
-  const [direction, setDirection] = useState('RIGHT')
-  const [food, setFood] = useState(randomFood())
+    [1, 0],
+  ],
+  food: randomFood(),
+  direction: 'RIGHT',
+  speed: 300,
+}
+
+export default class SnakeScreen extends React.Component {
+  state = initialState
+
+  
+  componentDidMount() {
+    setInterval(this.moveSnake, this.state.speed)
+  }
+
+  componentDidUpdate() {
+    this.checkIfOutBorder()
+    this.checkIfCollap()
+    this.checkIfEat()
+  }
 
 
+  moveSnake = () => {
+    let dots = [...this.state.snakeDots]
+    let head = dots[dots.length - 1]
 
-  return (
-    <>
-      <View style={styles.gameArea}>
-        <Snake snakeDots={snakeDots} />
-        <Food dot={food} />
-      </View>
+    switch (this.state.direction) {
+      case 'RIGHT':
+        head = [head[0] + 1, head[1]]
+        break
+      case 'LEFT':
+        head = [head[0] - 1, head[1]]
+        break
+      case 'UP':
+        head = [head[0], head[1] - 1]
+        break
+      case 'DOWN':
+        head = [head[0], head[1] + 1]
+        break
+      default:
+        head = [head[0] + 1, head[1]]
+        break
+    }
+    // console.log(head)
+    dots.push(head)
+    dots.shift()
+    this.setState({
+      snakeDots: dots,
+    })
+  }
 
-      <View style={styles.controls}>
+  checkIfEat = () => {
+    let head = this.state.snakeDots[this.state.snakeDots.length - 1]
+    const { food } = this.state
+    if (head[0] === food[0] && head[1] === food[1]) {
+      // console.log(head, '   ', food)
+      this.setState({
+        food: randomFood()
+      })
+      this.longerSnake()
+      this.increaseSpeed()
+    }
+  }
 
-        <View style={styles.controlRow}>
-          <TouchableOpacity >
-            <View style={styles.control} />
-          </TouchableOpacity>
+  longerSnake = () => {
+    let newSnake = [...this.state.snakeDots]
+    newSnake.unshift([])
+    this.setState({
+      snakeDots: newSnake
+    })
+  }
+
+  increaseSpeed = () => {
+    if (this.state.speed > 10) {
+      this.setState({
+        speed: this.state.speed - 10
+      })
+    }
+  }
+
+  checkIfCollap = () => {
+    let snake = [...this.state.snakeDots]
+    let head = snake[snake.length - 1]
+    snake.pop()
+    snake.forEach((dot) => {
+      if (head[0] === dot[0] && head[1] === dot[1]) {
+        // console.log(head, '      ',dot)
+        this.gameOver()
+      }
+    })
+  }
+
+  checkIfOutBorder = () => {
+    let head = this.state.snakeDots[this.state.snakeDots.length - 1]
+    if ( 
+      head[0] >= 19 || 
+      head[1] >= 19 || 
+      head[0] < 0 || 
+      head[1] < 0
+    ) {
+      this.gameOver()
+    }
+  }
+
+  gameOver = () => {
+    Alert.alert('lose')
+    this.setState(initialState)
+  }
+
+  render() {
+    const { snakeDots, food } = this.state
+    return (
+      <View style={styles.container}>
+        <View style={styles.gameArea}>
+          <Snake snakeDots={snakeDots} size={GRID_SIZE} />
+          <Food dot={food} size={GRID_SIZE} />
         </View>
 
-        <View style={styles.controlRow}>
-          <TouchableOpacity >
-            <View style={styles.control} />
-          </TouchableOpacity>
-          <View style={[styles.control, { backgroundColor: null}]} />
-          <TouchableOpacity>
-            <View style={styles.control} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.controlRow}>
-          <TouchableOpacity >
+        <View style={styles.controls}>
+          <View style={styles.controlRow}>
+            <TouchableOpacity
+              onPress={() => this.setState({ direction: 'UP' })}>
               <View style={styles.control} />
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.controlRow}>
+            <TouchableOpacity
+              onPress={() => this.setState({ direction: 'LEFT' })}>
+              <View style={styles.control} />
+            </TouchableOpacity>
+            <View style={[styles.control, { backgroundColor: null }]} />
+            <TouchableOpacity
+              onPress={() => this.setState({ direction: 'RIGHT' })}>
+              <View style={styles.control} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.controlRow}>
+            <TouchableOpacity
+              onPress={() => this.setState({ direction: 'DOWN' })}>
+              <View style={styles.control} />
+            </TouchableOpacity>
+          </View>
         </View>
-      
       </View>
-    </>
-  )
+    )
+  }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   gameArea: {
     position: 'relative',
-    borderColor: "#000", 
-    borderWidth: 8,
-    width: ScreenWidth, 
-    height: ScreenHeight-(ScreenHeight/2)
+    borderColor: '#000',
+    borderWidth: 7,
+    width: BOARD_SIZE,
+    height: BOARD_SIZE,
   },
   controls: {
-    width: ScreenWidth,
-    height: ScreenHeight/2,
+    width: 300,
+    height: 300,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -79,7 +198,7 @@ const styles = StyleSheet.create({
     width: 300,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   control: {
     width: 100,
@@ -87,5 +206,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
 })

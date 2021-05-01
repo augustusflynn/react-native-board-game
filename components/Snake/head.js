@@ -7,11 +7,12 @@ export default (props) => {
         position: 'absolute',
         borderWidth: 0.5, 
         borderColor:  '#fff',
-        width: props.size,
-        height: props.size,
-        backgroundColor : 'red',
-        left: props.dot[0]*props.size,
-        top: props.dot[1]*props.size
+        width: 15,
+        height: 15,
+        backgroundColor : '#000',
+        left: `${props.dot[0]}%`,
+        top: `${props.dot[1]}%`,
+        zIndex: 2,
         }}
         />
     )

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet} from 'react-native'
+import { View } from 'react-native'
 
 export default function Snake(props) {
     return (
@@ -7,24 +7,19 @@ export default function Snake(props) {
             {props.snakeDots.map((dot, i) => {
                 return (<View 
                     key={i} 
-                    style={[
-                        styles.snakedot, 
-                        {left: `${dot[0]}%`, top: `${dot[1]}%`}
-                    ]} 
+                    style={{
+                        position: 'absolute',
+                        borderWidth: 0.5, 
+                        borderColor:  '#fff',
+                        width: props.size,
+                        height: props.size,
+                        backgroundColor : '#000',
+                        left: dot[0]*props.size,
+                        top: dot[1]*props.size
+                    }}
                     />)
             })}
         </View>
     )
 }
 
-const styles = StyleSheet.create({
-    snakedot: {
-        position:"absolute",
-        backgroundColor: "#000",
-        borderWidth: 1, 
-        borderColor:  '#fff',
-        width: 15,
-        height: 15,
-        zIndex: 2,
-    },
-})
