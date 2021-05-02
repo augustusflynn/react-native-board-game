@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Text,
 } from 'react-native'
 import Snake from '../components/Snake/snake'
 import Food from '../components/Snake/food'
@@ -13,25 +14,25 @@ const CELL_SIZE = 20
 const BOARD_SIZE = GRID_SIZE * CELL_SIZE
 
 const randomFood = () => {
-  let max = 18,
-    min = 1
+  let max = 19, min = 0
   let x = Math.floor((Math.random() * (max - min + 1) + min) / 5) * 5
   let y = Math.floor((Math.random() * (max - min + 1) + min) / 5) * 5
   return [x, y]
 }
 
-const initialState = {
-  snakeDots: [
-    [0, 0],
-    [1, 0],
-  ],
-  food: randomFood(),
-  direction: 'RIGHT',
-  speed: 300,
-}
-
 export default class SnakeScreen extends React.Component {
-  state = initialState
+  state = {
+    snakeDots: [
+      // [0, 0],
+      [3, 7],
+    ],
+    food: randomFood(),
+    direction: 'PLAY',
+    // status: 'READY',
+    speed: 300,
+    curScore: 1,
+    highestScore: 0
+  }
 
   
   componentDidMount() {
@@ -39,9 +40,13 @@ export default class SnakeScreen extends React.Component {
   }
 
   componentDidUpdate() {
+    const { curScore, highestScore } = this.state
     this.checkIfOutBorder()
     this.checkIfCollap()
     this.checkIfEat()
+    if(curScore > highestScore){
+      this.setState({highestScore: curScore})
+    }
   }
 
 
@@ -63,7 +68,6 @@ export default class SnakeScreen extends React.Component {
         head = [head[0], head[1] + 1]
         break
       default:
-        head = [head[0] + 1, head[1]]
         break
     }
     // console.log(head)
@@ -75,12 +79,13 @@ export default class SnakeScreen extends React.Component {
   }
 
   checkIfEat = () => {
-    let head = this.state.snakeDots[this.state.snakeDots.length - 1]
-    const { food } = this.state
+    const { snakeDots, food, curScore } = this.state 
+    let head = snakeDots[snakeDots.length - 1]
     if (head[0] === food[0] && head[1] === food[1]) {
       // console.log(head, '   ', food)
       this.setState({
-        food: randomFood()
+        food: randomFood(),
+        curScore: curScore+1
       })
       this.longerSnake()
       this.increaseSpeed()
@@ -89,7 +94,7 @@ export default class SnakeScreen extends React.Component {
 
   longerSnake = () => {
     let newSnake = [...this.state.snakeDots]
-    newSnake.unshift([])
+    newSnake.unshift([300, 300])
     this.setState({
       snakeDots: newSnake
     })
@@ -128,48 +133,81 @@ export default class SnakeScreen extends React.Component {
   }
 
   gameOver = () => {
-    Alert.alert('lose')
-    this.setState(initialState)
+    const { snakeDots, highestScore } = this.state
+    
+    Alert.alert(`Highest Score: ${highestScore}`,`Your Score: ${snakeDots.length}`, [{ text: 'Try again...'} ,{/*{text: 'Go Back', onPress: () => this.setState({ status: 'READY' })},*/} ])
+    this.setState({
+      snakeDots: [
+        // [0, 0],
+        [3, 7],
+      ],
+      food: randomFood(),
+      direction: 'PLAY',
+      speed: 300,
+      curScore: 1
+    })
   }
 
   render() {
-    const { snakeDots, food } = this.state
-    return (
-      <View style={styles.container}>
-        <View style={styles.gameArea}>
-          <Snake snakeDots={snakeDots} size={GRID_SIZE} />
-          <Food dot={food} size={GRID_SIZE} />
-        </View>
+    const { snakeDots, food, direction, status } = this.state
+      // if(status == "READY") {
+      //   return (
+      //     <View style={styles.container} >
+      //       <Text>Select Mode</Text>
+      //       <View>
+      //         <TouchableOpacity onPress={() => this.setState({ speed: 1000, status: "START"})} >
+      //           <Text>EASY</Text>
+      //         </TouchableOpacity>
 
-        <View style={styles.controls}>
-          <View style={styles.controlRow}>
-            <TouchableOpacity
-              onPress={() => this.setState({ direction: 'UP' })}>
-              <View style={styles.control} />
-            </TouchableOpacity>
-          </View>
+      //         <TouchableOpacity onPress={() => this.setState({ speed: 300, status: "START"})}>
+      //           <Text>NORMAL</Text>
+      //         </TouchableOpacity>
 
-          <View style={styles.controlRow}>
-            <TouchableOpacity
-              onPress={() => this.setState({ direction: 'LEFT' })}>
-              <View style={styles.control} />
-            </TouchableOpacity>
-            <View style={[styles.control, { backgroundColor: null }]} />
-            <TouchableOpacity
-              onPress={() => this.setState({ direction: 'RIGHT' })}>
-              <View style={styles.control} />
-            </TouchableOpacity>
+      //         <TouchableOpacity onPress={() => this.setState({ speed:  1, status: "START"})} >
+      //           <Text>HARD</Text>
+      //         </TouchableOpacity>
+      //       </View>
+      //     </View>
+      //     )
+      // } else {
+        return (
+          <View style={styles.container}>
+            <View style={styles.gameArea}>
+            {(direction == 'PLAY') && <Text style={styles.start}>PRESS ANY BUTTON TO PLAY</Text>}
+            <Snake snakeDots={snakeDots} size={GRID_SIZE} />
+            <Food dot={food} size={GRID_SIZE} />
           </View>
-
-          <View style={styles.controlRow}>
-            <TouchableOpacity
-              onPress={() => this.setState({ direction: 'DOWN' })}>
-              <View style={styles.control} />
-            </TouchableOpacity>
+  
+            <View style={styles.controls}>
+              <View style={styles.controlRow}>
+                <TouchableOpacity
+                  onPress={() => this.setState({ direction: 'UP' })}>
+                  <View style={styles.control} />
+                </TouchableOpacity>
+              </View>
+    
+              <View style={styles.controlRow}>
+                <TouchableOpacity
+                  onPress={() => this.setState({ direction: 'LEFT' })}>
+                  <View style={styles.control} />
+                </TouchableOpacity>
+                <View style={[styles.control, { backgroundColor: null }]} />
+                <TouchableOpacity
+                  onPress={() => this.setState({ direction: 'RIGHT' })}>
+                  <View style={styles.control} />
+                </TouchableOpacity>
+              </View>
+    
+              <View style={styles.controlRow}>
+                <TouchableOpacity
+                  onPress={() => this.setState({ direction: 'DOWN' })}>
+                  <View style={styles.control} />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-    )
+        )
+      // }
   }
 }
 
@@ -178,6 +216,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#d7d7d7'
   },
   gameArea: {
     position: 'relative',
@@ -185,13 +224,19 @@ const styles = StyleSheet.create({
     borderWidth: 7,
     width: BOARD_SIZE,
     height: BOARD_SIZE,
+    backgroundColor: '#a4c78d'
+  },
+  start: {
+    position: 'absolute',
+    bottom: '10%',
+    left: '14%',
+    fontWeight: 'bold'
   },
   controls: {
     width: 300,
     height: 300,
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 30,
   },
   controlRow: {
     height: 100,
@@ -203,7 +248,7 @@ const styles = StyleSheet.create({
   control: {
     width: 100,
     height: 100,
-    backgroundColor: 'blue',
+    backgroundColor: '#070705',
     alignItems: 'center',
     justifyContent: 'center',
   },

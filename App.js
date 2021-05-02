@@ -10,7 +10,7 @@ import Main from './Navigator/Main'
 
 export default function App() {
   return (
-    <SnakeScreen />
+    <Main />
   )
 }
 

@@ -103,7 +103,7 @@ export default function TabScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#99b0b2',
+        backgroundColor: '#f0f0f0',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         margin: 10,
         borderColor: '#929292',
-        backgroundColor: '#d2b3b3',
+        backgroundColor: '#ffffff',
         width: 90,
         height: 90,
         alignItems: "center",

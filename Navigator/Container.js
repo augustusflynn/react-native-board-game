@@ -10,7 +10,7 @@ export default function Container({ navigation }) {
         {id: 3, name: "Dino Game", img: require('../img/Dinogame/1.png')},
         {id: 4, name: "Tic Tac Toe", img: require('../img/Tictac/1.png')},
         {id: 5, name: "Ball Juggling", img: require('../img/Soccer/soccer.png')},
-        {id: 6, name: "###"}
+        {id: 6, name: "Snake", img: require('../img/Snake/1.png')}
     ]
 
     return (

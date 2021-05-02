@@ -13,7 +13,7 @@ export default function Snake(props) {
                         borderColor:  '#fff',
                         width: props.size,
                         height: props.size,
-                        backgroundColor : '#000',
+                        backgroundColor : '#000103',
                         left: dot[0]*props.size,
                         top: dot[1]*props.size
                     }}
