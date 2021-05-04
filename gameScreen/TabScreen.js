@@ -5,7 +5,7 @@ import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons'
 export default function TabScreen() {
     const x = Dimensions.get('screen').width
     const y = Dimensions.get('screen').height
-    let [time, setTime] = useState(3000)
+    let [time, setTime] = useState(2000)
     let [blocks, setBlocks] = useState(blocksArr)
     let [score, setScore] = useState(0)
     let [curScore, setCurScore] = useState(0)
@@ -25,7 +25,7 @@ export default function TabScreen() {
     }, [random])
     
     const initialLizeGame = () => {
-        setTime(3000)
+        setTime(2000)
         setBlocks(blocksArr)
         setScore(score => score = 0)
         setStatus('Play')
@@ -38,7 +38,7 @@ export default function TabScreen() {
                 setWinner(true)
                 setStatus('Win')
             }
-            setTime(time => time - 350)
+            setTime(time => time - 250)
             random()
         } else {
             setCurScore(score)
@@ -52,7 +52,7 @@ export default function TabScreen() {
     if(status=='Play'){
         return (
             <View style={styles.container}>
-                <Text style={{fontSize: 50, color: '#fff', fontStyle: "italic", fontWeight: 'bold', position:"relative"}}>Tab The <Text style={{color:'#000'}}> Black</Text></Text>
+                <Image source={require('../img/tabtheblack/logo.png')} style={{width: 350, height: 80}}/>
                 <Text style={styles.score1}>Score: {score}</Text>
                 <View style={styles.flatlist}>
                     <FlatList 

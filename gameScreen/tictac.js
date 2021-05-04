@@ -1,6 +1,5 @@
 import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons';
-import React from 'react';
-import Images from '../img/Tictac/tictac'
+import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Alert, Image } from 'react-native';
 
 export default class TicTacToeScreen extends React.Component {
@@ -124,7 +123,7 @@ export default class TicTacToeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={{position: 'relative', flexDirection:'row',maxWidth: 600, maxHeight: 300, backgroundColor: '#ddd'}}>
-          <Image source={Images.tictac} style={{width: 300, height: 60}}/>
+          <Image source={require('../img/Tictac/logo.png')} style={{width: 300, height: 60}}/>
         </View>
         <View style={{paddingTop: 55}}/>
 
