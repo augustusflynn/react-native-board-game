@@ -29,7 +29,7 @@ export default class SnakeScreen extends React.Component {
     food: randomFood(),
     direction: 'PLAY',
     // status: 'READY',
-    speed: 300,
+    speed: 250,
     curScore: 1,
     highestScore: 0
   }
@@ -135,7 +135,17 @@ export default class SnakeScreen extends React.Component {
   gameOver = () => {
     const { snakeDots, highestScore } = this.state
     
-    Alert.alert(`Highest Score: ${highestScore}`,`Your Score: ${snakeDots.length}`, [ {text: 'Later'}, { text: 'Try again...', onPress: () => this.setState({ direction: 'RIGHT '})} ,{/*{text: 'Go Back', onPress: () => this.setState({ status: 'READY' })},*/} ])
+    Alert.alert(
+      `Highest Score: ${highestScore}`,
+      `Your Score: ${snakeDots.length}`, 
+      [ 
+        {text: 'Later'}, 
+        { 
+          text: 'Try again...', 
+          onPress: () => this.setState({ direction: 'RIGHT '})
+        } ,
+        {/*{text: 'Go Back', onPress: () => this.setState({ status: 'READY' })},*/} 
+      ])
     this.setState({
       snakeDots: [
         // [0, 0],

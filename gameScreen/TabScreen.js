@@ -5,7 +5,7 @@ import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons'
 export default function TabScreen() {
     const x = Dimensions.get('screen').width
     const y = Dimensions.get('screen').height
-    let [time, setTime] = useState(2000)
+    let [time, setTime] = useState(3000)
     let [blocks, setBlocks] = useState(blocksArr)
     let [score, setScore] = useState(0)
     let [curScore, setCurScore] = useState(0)
@@ -25,9 +25,9 @@ export default function TabScreen() {
     }, [random])
     
     const initialLizeGame = () => {
-        setTime(2000)
+        setTime(3000)
         setBlocks(blocksArr)
-        setScore(score => score = 0)
+        setScore(0)
         setStatus('Play')
     }
 
@@ -38,7 +38,9 @@ export default function TabScreen() {
                 setWinner(true)
                 setStatus('Win')
             }
-            setTime(time => time - 250)
+            if( time > 2000 ) setTime(time => time - 350)
+            if( time > 1000) setTime(time => time - 250)
+            if( time > 300) setTime(time => time - 200) 
             random()
         } else {
             setCurScore(score)
@@ -52,7 +54,9 @@ export default function TabScreen() {
     if(status=='Play'){
         return (
             <View style={styles.container}>
-                <Image source={require('../img/tabtheblack/logo.png')} style={{width: 350, height: 80}}/>
+                <View style={{paddingBottom: 16}}>
+                    <Image source={require('../img/tabtheblack/logo.png')} style={{width: 350, height: 80, top: 30}}/>
+                </View>
                 <Text style={styles.score1}>Score: {score}</Text>
                 <View style={styles.flatlist}>
                     <FlatList 
@@ -70,9 +74,8 @@ export default function TabScreen() {
         )
     } else if(status == 'Lose') {
         return (
-            <View style={styles.container}>
+            <View style={styles.container1}>
                 <View style={styles.board}>
-                    <Image style={styles.img} source={require('../img/tabtheblack/lose.png')} />
                     <Text style={styles.score}>Highest score: {!winner ? highestScore: 10}</Text>
                     <Text style={styles.score}>Your score: {curScore}</Text>
                     <Text style={styles.try}>Try again ... ?</Text>
@@ -104,8 +107,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f0f0f0',
+        alignItems: 'center'
+    },
+    container1: {
+        flex: 1,
+        backgroundColor: '#f0f0f0',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     flatlist: { 
         shadowColor: '#4a4a4a', 
@@ -113,7 +121,7 @@ const styles = StyleSheet.create({
         shadowOffset: {width: 10, height: 10},
         backgroundColor: '#b1b0b0',
         flexGrow: 0,
-        position: 'relative',
+        bottom: -30,
         height: 338,
         width: 338,
         borderRadius: 20,
@@ -122,7 +130,8 @@ const styles = StyleSheet.create({
     },
     score1: {
         fontSize: 45,
-        paddingVertical: 50,
+        paddingVertical: 40,
+        position: 'relative',
         fontFamily: 'Arial',
         shadowColor: '#000',
         shadowOffset: {width: -5, height: 3},
@@ -163,18 +172,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#cacdca',
         width: 350,
         height: 350,
-        alignItems: 'center',
-        justifyContent: 'center',
         shadowColor: '#000',
         shadowOffset: {width: -10, height: 10},
         shadowOpacity: 0.5,
         borderRadius: 10,
         borderWidth: 3,
-        borderColor: "#dadcdc"
+        borderColor: "#dadcdc",
+        bottom: 30,
+        alignItems: 'center'
     },
     score: {
         fontSize: 35,
-        paddingBottom: 20,
+        paddingVertical: 30,
         fontFamily: 'Helvetica',
         shadowColor: '#000',
         shadowOffset: {width: -5, height: 3},

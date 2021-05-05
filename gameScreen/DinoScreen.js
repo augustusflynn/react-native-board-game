@@ -16,6 +16,7 @@ export default class DinoScreen extends React.Component{
         highScore: 0
     }
   }
+
   jump(){
     Animated.timing(this.playerYval, {
       toValue: -150,
@@ -32,6 +33,7 @@ export default class DinoScreen extends React.Component{
       }).start()
     }, 200)
   }
+
   start(){
     setTimeout(() => {
       const objRun = Animated.loop(
@@ -53,6 +55,7 @@ export default class DinoScreen extends React.Component{
     this.checkStatus()
     this.countScore()
   }
+
   secondRun(){
     this.objXval.setValue(0)
     Animated.timing(this.objXval, {
@@ -68,6 +71,7 @@ export default class DinoScreen extends React.Component{
       } 
     }).start()
   }
+  
   secondbgRun(){
     this.bgXval.setValue(0)
     Animated.timing(this.bgXval, {
@@ -83,6 +87,7 @@ export default class DinoScreen extends React.Component{
       } 
     }).start()
   }
+
   checkStatus(){
     this.objXval.addListener(({value}) => {
       if(this.state.objWidth > 0){
@@ -96,6 +101,7 @@ export default class DinoScreen extends React.Component{
       }
     })
   }
+
   countScore(){
     setInterval(() => {
       if(this.state.status == 'normal'){
@@ -103,7 +109,9 @@ export default class DinoScreen extends React.Component{
       }
     }, 500);
   }
+
   render(){
+
     if(this.state.status == 'normal'){
       return(
         <View style={styles.container} onTouchStart={() => this.jump()}>
@@ -127,7 +135,9 @@ export default class DinoScreen extends React.Component{
         
         </View>
       )
-    }else if(this.state.status == 'crashed'){
+    }
+    
+    else if(this.state.status == 'crashed'){
       return(
         <View style={{flex: 1, justifyContent: 'center'}}>
           <Text style={{textAlign: 'center', fontSize: 18}}>You made {this.state.score} Points</Text>
@@ -143,7 +153,9 @@ export default class DinoScreen extends React.Component{
           </TouchableOpacity>
         </View>
       )
-    }else{
+    }
+    
+    else{
       return(
         <View style={{flex: 1, justifyContent: 'center'}}>
           {/* <Image style={styles.logo} source={require('../img/Dinogame/2.png')} /> */}
