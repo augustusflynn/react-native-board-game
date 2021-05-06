@@ -76,7 +76,7 @@ export default function TabScreen() {
         return (
             <View style={styles.container1}>
                 <View style={styles.board}>
-                    <Text style={styles.score}>Highest score: {!winner ? highestScore: 10}</Text>
+                    <Text style={styles.score1}>Highest score: {!winner ? highestScore: 10}</Text>
                     <Text style={styles.score}>Your score: {curScore}</Text>
                     <Text style={styles.try}>Try again ... ?</Text>
                     <TouchableOpacity style={styles.button} onPress={() => initialLizeGame()}>

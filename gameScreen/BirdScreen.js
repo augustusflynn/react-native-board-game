@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableWithoutFeedback, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons';
 import Bird from '../components/Bird/bird'
 import Obstacles from '../components/Bird/obstacles'
 
@@ -12,15 +13,15 @@ export default function App() {
   const [birdBottom, setBirdBottom]= useState(screenHeight / 2)
   const [obstaclesLeft, setObstaclesLeft]= useState(screenWidth)
   const [obstaclesLeftTwo, setObstaclesLeftTwo]= useState(screenWidth + screenWidth/2 + 30)
-  const [obstaclesNegHeight, setObstaclesNegHeight]= useState(0)
-  const [obstaclesNegHeightTwo, setObstaclesNegHeightTwo]= useState(0)
+  const [obstaclesNegHeight, setObstaclesNegHeight]= useState(- Math.random() * 300)
+  const [obstaclesNegHeightTwo, setObstaclesNegHeightTwo]= useState(- Math.random() * 300)
   const [score, setScore]= useState(0)
   const [highestScore, setHighestScore] = useState(0)
 
   const [status, setStatus] = useState("PLAY")
   const gravity = 3
   let obstacleWidth = 60
-  let obstacleHeight = 300
+  let obstacleHeight = 500
   let gap = 200
   let gameTimerId
   let obstaclesTimerId
@@ -60,7 +61,7 @@ export default function App() {
     } else {
       setScore(score => score +1)
       setObstaclesLeft(screenWidth)
-      setObstaclesNegHeight( - Math.random() * 100)
+      setObstaclesNegHeight( - Math.random() * 300)
     }
   }, [obstaclesLeft])
 
@@ -76,7 +77,7 @@ export default function App() {
       } else {
           setScore(score => score +1)
           setObstaclesLeftTwo(screenWidth)
-          setObstaclesNegHeightTwo( - Math.random() * 100)
+          setObstaclesNegHeightTwo( - Math.random() * 300)
         }
   }, [obstaclesLeftTwo])
 
@@ -122,7 +123,7 @@ export default function App() {
   if(status == "PLAY") {
     return (
       <TouchableWithoutFeedback onPress={jump}>
-        <View style={styles.container}>
+        <ImageBackground source={require('../img/Bird/bg.png')} style={styles.container}>
           <Bird 
             birdBottom = {birdBottom} 
             birdLeft = {birdLeft}
@@ -130,34 +131,37 @@ export default function App() {
             birdHeight = {birdHeight}
           />
           <Obstacles 
-            color={'green'}
             obstacleWidth = {obstacleWidth}
             obstacleHeight = {obstacleHeight}
             randomBottom = {obstaclesNegHeight}
             gap = {gap}
             obstaclesLeft = {obstaclesLeft}
           />
-          <Obstacles 
-            color={'yellow'}
+          <Obstacles
             obstacleWidth = {obstacleWidth}
             obstacleHeight = {obstacleHeight}
             randomBottom = {obstaclesNegHeightTwo}
             gap = {gap}
             obstaclesLeft = {obstaclesLeftTwo}
           />
-        </View>
+        </ImageBackground>
       </TouchableWithoutFeedback>
     )
   }
   else {
     return ( 
-      <View style={styles.board}>
-        <Text>Highest Score: {highestScore}</Text>
-        <Text>Your Score: {score}</Text>
-        <TouchableOpacity style={styles.button} onPress={initializeGame}>
-          <Text>Try again...</Text>
+      <ImageBackground source={require('../img/Bird/board.png')} style={styles.board}>
+        <View style={styles.point}>
+          <Text style={styles.highScore}>Highest Score: {highestScore}</Text>
+          <Text style={styles.score}>Your Score: {score}</Text>
+          <Text style={styles.re}>Try again. . . ?</Text>
+        </View>
+        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <TouchableOpacity onPress={initializeGame} style={styles.button}>
+          <Icon name="reload" size={25} color={'#796c47'}/>
         </TouchableOpacity>
-      </View>
+        </View>
+      </ImageBackground>
     )
   }
 }
@@ -170,14 +174,48 @@ const styles = StyleSheet.create({
   board: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ddd'
+    alignItems: 'center'
   },
-  button: {
+  point: {
+    padding: 16, 
+    margin: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#eee',
-    width: 100,
-    height: 100
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 0}
+  },
+  highScore: {
+    fontSize: 35,
+    position: 'relative',
+    fontFamily: 'Arial',
+    shadowColor: '#000',
+    shadowOffset: {width: -5, height: 3},
+    shadowOpacity: 0.5,
+    color: "#675d41",
+    fontWeight: 'bold'
+  },
+  score: {
+    fontSize: 25,
+    fontFamily: 'Arial',
+    shadowColor: '#000',
+    shadowOffset: {width: -5, height: 3},
+    color: "#796c47",
+    shadowOpacity: 0.5,
+    paddingVertical: 16
+  },
+  re: {
+    fontSize: 20,
+    color: '#796c47'
+  },
+  button: {
+    width: 125,
+    height: 60,
+    backgroundColor: 'rgb(204,204,0)',
+    shadowColor: 'rgb(163,163,0)',
+    shadowOpacity: 1,
+    shadowOffset: {width: 3, height: 3},
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10
   }
 })

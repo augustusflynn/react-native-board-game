@@ -1,9 +1,8 @@
 
 import React from 'react';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 
 const Obstacles = ({
-    color,
     obstacleWidth, 
     obstacleHeight, 
     randomBottom, 
@@ -14,20 +13,22 @@ const Obstacles = ({
         <>
             <View style={{
                 position: 'absolute',
-                backgroundColor: color,
                 width: obstacleWidth,
                 height: 500,
                 left: obstaclesLeft,
                 bottom: randomBottom + obstacleHeight + gap,
-            }}></View>
+            }}>
+                <Image source={require('../../img/Bird/obstacle.png')} style={{position: 'absolute'}} />
+            </View>
             <View style={{
                 position: 'absolute',
-                backgroundColor: color,
                 width: obstacleWidth,
                 height: obstacleHeight,
                 left: obstaclesLeft,
                 bottom: randomBottom,
-            }}></View>
+            }}>
+                <Image source={require('../../img/Bird/obstacle1.png')} style={{position: 'absolute'}} />
+            </View>
         </>
     )
 }
