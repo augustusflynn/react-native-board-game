@@ -24,6 +24,7 @@ export default function Main() {
                 <Stack.Screen name="Ball Juggling" component={BallScreen} />
                 <Stack.Screen name="Snake" component={SnakeScreen} />
                 <Stack.Screen name="Flappy Bird" component={BirdScreen} />
+                <Stack.Screen name="#" component={BirdScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -19,8 +19,8 @@ export default function App() {
   const screenWidth = Dimensions.get("screen").width;
   const screenHeight = Dimensions.get("screen").height;
   const birdLeft = screenWidth / 2;
-  const birdWidth = 50;
-  const birdHeight = 60;
+  const birdWidth = 75;
+  const birdHeight = 55;
   const [birdBottom, setBirdBottom] = useState(screenHeight / 2);
   const [obstaclesLeft, setObstaclesLeft] = useState(screenWidth);
   const [obstaclesLeftTwo, setObstaclesLeftTwo] = useState(
