@@ -33,8 +33,7 @@ export default function App() {
     -Math.random() * 300
   );
   const [score, setScore] = useState(0);
-  const [highestScore, setHighestScore] = useState(0);
-  const [sound, setSound] = useState();
+  const [highestScore, setHighestScore] = useState(0)
 
   const [status, setStatus] = useState("PLAY");
   const gravity = 5;
@@ -56,6 +55,7 @@ export default function App() {
         clearInterval(gameTimerId);
       };
     }
+
   }, [birdBottom]);
   // console.log(birdBottom)
 
@@ -72,11 +72,14 @@ export default function App() {
       obstaclesTimerId = setInterval(() => {
         setObstaclesLeft((obstaclesLeft) => obstaclesLeft - 5);
       }, 30);
+      if(obstaclesLeft > (screenWidth/2 - 35) && obstaclesLeft < (screenWidth/2) - 30){
+        setScore((score) => score + 1);
+        playSoundPing();
+      }
       return () => {
         clearInterval(obstaclesTimerId);
       };
     } else {
-      setScore((score) => score + 1);
       setObstaclesLeft(screenWidth);
       setObstaclesNegHeight(-Math.random() * 300);
     }
@@ -88,11 +91,14 @@ export default function App() {
       obstaclesTimerIdTwo = setInterval(() => {
         setObstaclesLeftTwo((obstaclesLeftTwo) => obstaclesLeftTwo - 5);
       }, 30);
+      if(obstaclesLeftTwo > (screenWidth/2 - 35) && obstaclesLeftTwo < (screenWidth/2) - 30){
+        setScore((score) => score + 1);
+        playSoundPing();
+      }
       return () => {
         clearInterval(obstaclesTimerIdTwo);
       };
     } else {
-      setScore((score) => score + 1);
       setObstaclesLeftTwo(screenWidth);
       setObstaclesNegHeightTwo(-Math.random() * 300);
     }
@@ -115,29 +121,40 @@ export default function App() {
         obstaclesLeftTwo < screenWidth / 2 + 30)
     ) {
       // console.log('game over')
-      gameOver();
+      gameOver()
+      playSoundDead()
     }
   });
-
+  
+  //fly sound
   async function playSoundFly() {
-    // console.log('Loading Sound')
+    // console.log('Loading SoundFly')
     const { sound } = await Audio.Sound.createAsync(
       require('../audio/BirdSounds/Fly.mp3')
     )
-    setSound(sound)
 
-    // console.log('Playing Sound')
+    // console.log('Playing SoundFly')
+    await sound.playAsync()
+  }
+  
+  //dead sound
+  async function playSoundDead() {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../audio/BirdSounds/Dead.mp3')
+    )
+
     await sound.playAsync()
   }
 
-  useEffect(() => {
-    return sound
-      ? () => {
-          // console.log('Unloading Sound');
-          sound.unloadAsync(); 
-        }
-      : undefined;
-  }, [sound]);
+  //ping sound
+  async function playSoundPing() {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../audio/BirdSounds/Ping.mp3')
+    )
+
+    await sound.playAsync()
+  }
+
 
   const gameOver = () => {
     clearInterval(gameTimerId);

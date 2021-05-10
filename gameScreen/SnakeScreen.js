@@ -6,6 +6,7 @@ import {
   Alert,
   Text,
 } from 'react-native'
+import { Audio } from 'expo-av';
 import Snake from '../components/Snake/snake'
 import Food from '../components/Snake/food'
 
@@ -49,6 +50,52 @@ export default class SnakeScreen extends React.Component {
     }
   }
 
+  async playSoundEat() {
+    const { sound } = await Audio.Sound.createAsync(
+       require('../audio/SnakeAudio/eat.mp3')
+    )
+
+    await sound.playAsync()
+  }
+
+  async playSoundDead() {
+    const { sound } = await Audio.Sound.createAsync(
+       require('../audio/SnakeAudio/dead.mp3')
+    )
+
+    await sound.playAsync()
+  }
+
+  async playSoundUp() {
+    const { sound } = await Audio.Sound.createAsync(
+       require('../audio/SnakeAudio/up.mp3')
+    )
+
+    await sound.playAsync()
+  }
+
+  async playSoundDown() {
+    const { sound } = await Audio.Sound.createAsync(
+       require('../audio/SnakeAudio/down.mp3')
+    )
+    await sound.playAsync()
+  }
+
+  async playSoundLeft() {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../audio/SnakeAudio/left.mp3')
+    )
+
+    await sound.playAsync()
+  }
+
+  async playSoundRight() {
+    const { sound } = await Audio.Sound.createAsync(
+       require('../audio/SnakeAudio/right.mp3')
+    )
+
+    await sound.playAsync()
+  }
 
   moveSnake = () => {
     let dots = [...this.state.snakeDots]
@@ -89,6 +136,7 @@ export default class SnakeScreen extends React.Component {
       })
       this.longerSnake()
       this.increaseSpeed()
+      this.playSoundEat()
     }
   }
 
@@ -116,6 +164,7 @@ export default class SnakeScreen extends React.Component {
       if (head[0] === dot[0] && head[1] === dot[1]) {
         // console.log(head, '      ',dot)
         this.gameOver()
+        this.playSoundDead()
       }
     })
   }
@@ -129,6 +178,7 @@ export default class SnakeScreen extends React.Component {
       head[1] < 0
     ) {
       this.gameOver()
+      this.playSoundDead()
     }
   }
 
@@ -139,12 +189,13 @@ export default class SnakeScreen extends React.Component {
       `Highest Score: ${highestScore}`,
       `Your Score: ${snakeDots.length}`, 
       [ 
-        {text: 'Later'}, 
+        {
+          text: 'Later'
+        },
         { 
           text: 'Try again...', 
-          onPress: () => this.setState({ direction: 'RIGHT '})
-        } ,
-        {/*{text: 'Go Back', onPress: () => this.setState({ status: 'READY' })},*/} 
+          onPress: () => this.setState({ direction: 'OK'})
+        }
       ])
     this.setState({
       snakeDots: [
@@ -191,26 +242,38 @@ export default class SnakeScreen extends React.Component {
             <View style={styles.controls}>
               <View style={styles.controlRow}>
                 <TouchableOpacity
-                  onPress={() => this.setState({ direction: 'UP' })}>
+                  onPress={() => {
+                    this.setState({ direction: 'UP' })
+                    this.playSoundUp()
+                    }}>
                   <View style={styles.control} />
                 </TouchableOpacity>
               </View>
     
               <View style={styles.controlRow}>
                 <TouchableOpacity
-                  onPress={() => this.setState({ direction: 'LEFT' })}>
+                  onPress={() => {
+                      this.setState({ direction: 'LEFT' })
+                      this.playSoundLeft()
+                      }}>
                   <View style={styles.control} />
                 </TouchableOpacity>
                 <View style={[styles.control, { backgroundColor: null }]} />
                 <TouchableOpacity
-                  onPress={() => this.setState({ direction: 'RIGHT' })}>
+                  onPress={() => {
+                    this.setState({ direction: 'RIGHT' })
+                    this.playSoundRight()
+                    }}>
                   <View style={styles.control} />
                 </TouchableOpacity>
               </View>
     
               <View style={styles.controlRow}>
                 <TouchableOpacity
-                  onPress={() => this.setState({ direction: 'DOWN' })}>
+                  onPress={() => {
+                    this.setState({ direction: 'DOWN' })
+                    this.playSoundDown()
+                  }}>
                   <View style={styles.control} />
                 </TouchableOpacity>
               </View>
@@ -246,7 +309,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     flexDirection: 'column',
-    paddingTop: 30,
+    paddingTop: 24,
   },
   controlRow: {
     height: 100,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text ,StyleSheet, FlatList, TouchableOpacity, Image, Dimensions  } from 'react-native'
 import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons'
+import { Audio } from 'expo-av';
 
 export default function TabScreen() {
     const x = Dimensions.get('screen').width
@@ -31,8 +32,23 @@ export default function TabScreen() {
         setStatus('Play')
     }
 
+    async function playSoundPing() {
+        const { sound } = await Audio.Sound.createAsync(
+          require('../audio/TabSound/ting.mp3')
+        )
+        await sound.playAsync()
+    }
+
+    async function playSoundLose() {
+        const { sound } = await Audio.Sound.createAsync(
+          require('../audio/TabSound/lose.mp3')
+        )
+        await sound.playAsync()
+    }
+
     const chooseHandler = (blockValue) => {
         if (blockValue == 5) {
+            playSoundPing()
             setScore(score+1)
             if(score == 9){
                 setWinner(true)
@@ -43,6 +59,7 @@ export default function TabScreen() {
             if( time > 300) setTime(time => time - 200) 
             random()
         } else {
+            playSoundLose()
             setCurScore(score)
             setStatus('Lose')
         }
@@ -129,8 +146,8 @@ const styles = StyleSheet.create({
         borderColor: "#49470a"
     },
     score1: {
-        fontSize: 45,
-        paddingVertical: 40,
+        fontSize: 40,
+        paddingVertical: 20,
         position: 'relative',
         fontFamily: 'Arial',
         shadowColor: '#000',

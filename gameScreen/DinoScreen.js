@@ -1,6 +1,7 @@
 import React  from 'react'
 import {Text, View, Image,TouchableOpacity, Animated, Easing, StyleSheet} from 'react-native'
 import {MaterialCommunityIcons as Icon} from 'react-native-vector-icons'
+import { Audio } from 'expo-av'
 
 export default class DinoScreen extends React.Component{
   constructor(props) {
@@ -32,6 +33,20 @@ export default class DinoScreen extends React.Component{
         useNativeDriver: false
       }).start()
     }, 200)
+  }
+
+  async playSoundJump() {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../audio/DinoSound/jump.mp3')
+    )
+    await sound.playAsync()
+  }
+
+  async playSoundCrack() {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../audio/DinoSound/crack.mp3')
+    )
+    await sound.playAsync()
   }
 
   start(){
@@ -92,8 +107,8 @@ export default class DinoScreen extends React.Component{
     this.objXval.addListener(({value}) => {
       if(this.state.objWidth > 0){
         if(this.playerYval._value > -40 && value >= -450 && value <= -380){
-          //console.log('crash')
           this.setState({status: 'crashed'})
+          // this.playSoundCrack()
           if(this.state.score > this.state.highScore){
             this.setState({highScore: this.state.score})
           }
@@ -114,7 +129,12 @@ export default class DinoScreen extends React.Component{
 
     if(this.state.status == 'normal'){
       return(
-        <View style={styles.container} onTouchStart={() => this.jump()}>
+        <View style={styles.container} 
+          onTouchStart={() => {
+            this.playSoundJump()
+            this.jump() 
+          }}
+        >
 
           <Animated.View style={[ { transform: [{translateY: this.playerYval}] }, styles.player ]}>
             <Icon name ="google-downasaur" size={40} />

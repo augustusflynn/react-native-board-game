@@ -6,6 +6,7 @@ import {View,
         Image} from 'react-native';
 import Score from '../components/Soccer/Score';
 import Emoji from '../components/Soccer/Emoji';
+import { Audio } from 'expo-av'
 
 const LC_IDLE = 0;
 const LC_RUNNING = 1;
@@ -48,6 +49,14 @@ export default class BallScreen extends Component {
         if(this.interval) {
             clearInterval(this.interval);
         }
+    }
+
+
+    async playSoundKick() {
+        const { sound } = await Audio.Sound.createAsync(
+          require('../audio/BallSound/kick.mp3')
+        )
+        await sound.playAsync()
     }
 
     onTap(event) {
@@ -132,7 +141,11 @@ export default class BallScreen extends Component {
             <View>
                 <Score score={this.state.score} y={SCORE_Y} scored={this.state.scored}/>
                 <Emoji scored={this.state.scored} y={EMOJI_Y} lost={this.state.lost}/>
-                <TouchableWithoutFeedback onPress={(event) => this.onTap(event.nativeEvent)}>
+                <TouchableWithoutFeedback onPress={(event) => {
+                    this.onTap(event.nativeEvent)
+                    this.playSoundKick()
+                    }}
+                >
                   <Image source={require('../img/Soccer/soccer.png')} style={[styles.ball, position, rotation]} />
                 </TouchableWithoutFeedback>
             </View>

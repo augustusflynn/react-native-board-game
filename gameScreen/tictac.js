@@ -113,11 +113,10 @@ export default class TicTacToeScreen extends React.Component {
     var value = gameState[row][col];
     switch(value){
       case 1: return <Icon name="close" style={styles.tileX}/>;
-      case -1: return <Icon name="circle-outline" style={styles.tileO}/>
+      case -1:return <Icon name="circle-outline" style={styles.tileO}/>
       default: return <View />
     }
   }
-
 
   render() {
     return (
