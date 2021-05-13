@@ -54,7 +54,7 @@ export default function App() {
         setEnemySpeed(50)
         break
       case 18:
-        setEnemySpeed(10)
+        setEnemySpeed(30)
         break
       default: 
         break
