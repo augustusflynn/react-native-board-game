@@ -30,7 +30,7 @@ export default class SnakeScreen extends React.Component {
     food: randomFood(),
     direction: 'PLAY',
     // status: 'READY',
-    speed: 250,
+    speed: 200,
     curScore: 1,
     highestScore: 0
   }
@@ -135,7 +135,6 @@ export default class SnakeScreen extends React.Component {
         curScore: curScore+1
       })
       this.longerSnake()
-      this.increaseSpeed()
       this.playSoundEat()
     }
   }
@@ -146,14 +145,6 @@ export default class SnakeScreen extends React.Component {
     this.setState({
       snakeDots: newSnake
     })
-  }
-
-  increaseSpeed = () => {
-    if (this.state.speed > 10) {
-      this.setState({
-        speed: this.state.speed - 10
-      })
-    }
   }
 
   checkIfCollap = () => {
@@ -188,10 +179,7 @@ export default class SnakeScreen extends React.Component {
     Alert.alert(
       `Highest Score: ${highestScore}`,
       `Your Score: ${snakeDots.length}`, 
-      [ 
-        {
-          text: 'Later'
-        },
+      [
         { 
           text: 'Try again...', 
           onPress: () => this.setState({ direction: 'OK'})

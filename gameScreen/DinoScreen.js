@@ -108,7 +108,6 @@ export default class DinoScreen extends React.Component{
       if(this.state.objWidth > 0){
         if(this.playerYval._value > -40 && value >= -450 && value <= -380){
           this.setState({status: 'crashed'})
-          // this.playSoundCrack()
           if(this.state.score > this.state.highScore){
             this.setState({highScore: this.state.score})
           }
@@ -159,16 +158,17 @@ export default class DinoScreen extends React.Component{
     
     else if(this.state.status == 'crashed'){
       return(
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <Text style={{textAlign: 'center', fontSize: 18}}>You made {this.state.score} Points</Text>
-          <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 16}}>Highest Score: {this.state.highScore} Points</Text>
+        <View style={styles.loseBoard}>
+          <Text style={styles.point}>You made {this.state.score} Points</Text>
+          <Text style={styles.highestScore}>Highest Score: {this.state.highScore} Points</Text>
           <TouchableOpacity onPress={() => {
-             setTimeout(() => {
-              this.objXval.setValue(0)
-              this.playerYval.setValue(0)
-              this.setState({score: 0, status: 'normal'})
-             }, 1000);
-          }} style={{alignSelf: 'center', padding: 5, backgroundColor: 'black', marginTop: 20}}>
+            this.playSoundCrack()
+            setTimeout(() => {
+            this.objXval.setValue(0)
+            this.playerYval.setValue(0)
+            this.setState({score: 0, status: 'normal'})
+            }, 1000);
+          }} style={styles.button}>
             <Text style={{color: 'white', fontSize: 15, }}>Retry</Text>
           </TouchableOpacity>
         </View>
@@ -239,12 +239,23 @@ const styles = StyleSheet.create({
   right: 30, 
   fontSize: 18
   },
-  // logo: {
-  //   alignItems:'center',
-  //   justifyContent: 'center',
-  //   maxWidth: 200,
-  //   maxHeight: 100,
-
-  // }
-
+  loseBoard: {
+    flex: 1, 
+    justifyContent: 'center'
+  },
+  point: {
+    flex: 1, 
+    justifyContent: 'center'
+  },
+  highestScore: {
+    textAlign: 'center', 
+    fontWeight: 'bold', 
+    fontSize: 16
+  },
+  button: {
+    alignSelf: 'center', 
+    padding: 5, 
+    backgroundColor: 'black', 
+    marginTop: 20
+  }
 })

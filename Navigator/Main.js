@@ -9,6 +9,7 @@ import MineSweepScreen from '../gameScreen/MineSweepScreen'
 import BallScreen from '../gameScreen/BallScreen'
 import SnakeScreen from '../gameScreen/SnakeScreen'
 import BirdScreen from '../gameScreen/BirdScreen'
+import DontLetHimDie from '../gameScreen/DontLetHimDie'
 
 const Stack = createStackNavigator()
 
@@ -24,7 +25,7 @@ export default function Main() {
                 <Stack.Screen name="Ball Juggling" component={BallScreen} />
                 <Stack.Screen name="Snake" component={SnakeScreen} />
                 <Stack.Screen name="Flappy Bird" component={BirdScreen} />
-                <Stack.Screen name="#" component={BirdScreen} />
+                <Stack.Screen name="Don't Let Him Die" component={DontLetHimDie} />
             </Stack.Navigator>
         </NavigationContainer>
     )

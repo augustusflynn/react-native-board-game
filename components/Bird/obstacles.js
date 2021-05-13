@@ -1,13 +1,15 @@
 
 import React from 'react';
-import { Image, View } from 'react-native';
+import { Image, TouchableWithoutFeedback, View } from 'react-native';
 
 const Obstacles = ({
     obstacleWidth, 
     obstacleHeight, 
     randomBottom, 
     gap, 
-    obstaclesLeft}) => {
+    obstaclesLeft,
+    jump
+}) => {
 
     return (
         <>
@@ -18,7 +20,9 @@ const Obstacles = ({
                 left: obstaclesLeft,
                 bottom: randomBottom + obstacleHeight + gap,
             }}>
-                <Image source={require('../../img/Bird/obstacle.png')} style={{position: 'absolute'}} />
+                <TouchableWithoutFeedback onPress={jump}>
+                    <Image source={require('../../img/Bird/obstacle.png')} style={{position: 'absolute'}} />
+                </TouchableWithoutFeedback>
             </View>
             <View style={{
                 position: 'absolute',
@@ -27,7 +31,9 @@ const Obstacles = ({
                 left: obstaclesLeft,
                 bottom: randomBottom,
             }}>
-                <Image source={require('../../img/Bird/obstacle1.png')} style={{position: 'absolute'}} />
+                <TouchableWithoutFeedback onPress={jump}>
+                    <Image source={require('../../img/Bird/obstacle1.png')} style={{position: 'absolute'}} />
+                </TouchableWithoutFeedback>
             </View>
         </>
     )

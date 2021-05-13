@@ -62,6 +62,7 @@ export default function App() {
   const jump = () => {
     if (birdBottom < screenHeight) {
       setBirdBottom((birdBottom) => birdBottom + 25);
+      playSoundFly()
       // console.log('jumped')
     }
   };
@@ -173,7 +174,7 @@ export default function App() {
 
   if (status == "PLAY") {
     return (
-      <TouchableWithoutFeedback onPress={() => {jump(), playSoundFly()}}>
+      <TouchableWithoutFeedback onPress={jump}>
         <ImageBackground
           source={require("../img/Bird/bg.png")}
           style={styles.container}
@@ -185,6 +186,7 @@ export default function App() {
             birdHeight={birdHeight}
           />
           <Obstacles
+            jump={jump}
             obstacleWidth={obstacleWidth}
             obstacleHeight={obstacleHeight}
             randomBottom={obstaclesNegHeight}
@@ -192,6 +194,7 @@ export default function App() {
             obstaclesLeft={obstaclesLeft}
           />
           <Obstacles
+            jump={jump}
             obstacleWidth={obstacleWidth}
             obstacleHeight={obstacleHeight}
             randomBottom={obstaclesNegHeightTwo}
