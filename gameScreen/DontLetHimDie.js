@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons';
+import { Audio } from 'expo-av';
 import Enemy from '../components/DontLetHimDie/Enemy';
 import Player from '../components/DontLetHimDie/player';
 
@@ -61,6 +62,20 @@ export default function App() {
     }
   });
 
+  async function playSoundLeft() {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../audio/DontLetHimDieSounds/left.mp3')
+    )
+    await sound.playAsync()
+  }
+
+  async function playSoundRight() {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../audio/DontLetHimDieSounds/right.mp3')
+    )
+    await sound.playAsync()
+  }
+
   //start enemy
   useEffect(() => {
     if (enemyStartPos < 200) {
@@ -101,8 +116,10 @@ export default function App() {
   const movePlayer = (direction) => {
     if (direction == 'left') {
       setPlayerPos(40);
+      playSoundLeft()
     } else if (direction == 'right') {
       setPlayerPos(MAX_WIDTH - 140);
+      playSoundRight()
     }
   };
 

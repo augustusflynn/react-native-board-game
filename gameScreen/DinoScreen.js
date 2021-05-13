@@ -244,13 +244,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   point: {
-    flex: 1, 
-    justifyContent: 'center'
+    textAlign: 'center',
+    fontWeight: '500',
+    fontSize: 16
   },
   highestScore: {
     textAlign: 'center', 
     fontWeight: 'bold', 
-    fontSize: 16
+    fontSize: 24
   },
   button: {
     alignSelf: 'center', 
