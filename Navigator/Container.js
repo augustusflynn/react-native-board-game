@@ -12,7 +12,9 @@ export default function Container({ navigation }) {
         {id: 5, name: "Ball Juggling", img: require('../img/Soccer/soccer.png')},
         {id: 6, name: "Snake", img: require('../img/Snake/1.png')},
         {id: 7, name: "Flappy Bird", img: require('../img/Bird/logo.png')},
-        {id: 8, name: "Don't Let Him Die", img: require('../img/DontLetHimDie/player.png')}
+        {id: 8, name: "Don't Let Him Die", img: require('../img/DontLetHimDie/player.png')},
+        {id: 9, name: "Ping Pong", img: require('../img/Pong/pong.png')},
+        {id: 10, name: "Comming Soon", img: require('../img/DontLetHimDie/player.png')}
     ]
 
     return (

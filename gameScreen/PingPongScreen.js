@@ -49,14 +49,7 @@ export default class PingPongScreen extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(() => {
-      this.update()
-      this.hitWall()
-    }, 1000/50)
-  }
-
-  componentDidUpdate() {
-    this.checkStatus()
+    setInterval(this.update, 1000/50)
   }
 
   async playSoundComScore() {
@@ -147,8 +140,9 @@ export default class PingPongScreen extends React.Component {
     return pLeft < bRight && pTop < bBottom && pRight > bLeft && pBottom > bTop
   }
 
-  checkStatus = () => {
-    const { ball, score1, score2 } = this.state
+  update = () => {
+    const { ball, score1, score2, user1, user2, speed, velocityX, velocityY } = this.state
+
     //check out of game area
     if(ball[0] < 0) {
       this.setState({ score2: score2 + 1})
@@ -159,33 +153,27 @@ export default class PingPongScreen extends React.Component {
       this.playSoundUserScore()
       this.resetBall()
     }
-  }
-
-  // when the ball collides with bottom and top walls we inverse the velocityY.
-  hitWall = () => {
-    const { ball } = this.state
-    if(ball[1] < 0 || ball[1] > MAX_WIDTH-20) {
-      this.setState({ velocityY: -this.state.velocityY})
-      this.playSoundWall()
-    }
-  }
-
-  update = () => {
-    const { ball, score1, score2, user1, user2, speed, velocityX, velocityY } = this.state
     
     //start ball
     let newBall = [ball[0] + velocityX, ball[1] + velocityY]
     this.setState({ ball: newBall })
-
+    
     //simple AI
     let bot = [user2[0], user2[1] + ((ball[1]- ( user2[1] + user.width/2))) * 0.1] 
     this.setState({ user2: bot })
+    
+    // when the ball collides with bottom and top walls we inverse the velocityY.
+    if(ball[1] < 0 || ball[1] > MAX_WIDTH-20) {
+      this.setState({ velocityY: -this.state.velocityY})
+      this.playSoundWall()
+    }
 
     //check player
-    let player = (ball[0] + 10 < MAX_HEIGHT/2) ? user1 : user2
+    let player = (ball[0] + 20 < MAX_HEIGHT/2) ? user1 : user2
 
     // if the ball hits a paddle
     if(this.collision(ball, player)) {
+
       this.playSoundHit()
 
       //check where the ball hit is
@@ -262,8 +250,8 @@ const styles = StyleSheet.create({
     width: MAX_WIDTH,
     height: MAX_HEIGHT,
     position: 'relative',
-    backgroundColor: '#000',
-    borderWidth: 0.5
+    backgroundColor: '#fff',
+    borderWidth: 1
   },
   containButton: {
     flexDirection: 'row'
