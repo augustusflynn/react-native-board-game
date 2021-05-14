@@ -1,33 +1,10 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Audio }  from 'expo-av'
+import { ballProps, user1Props, user2Props, user, MAX_HEIGHT, MAX_WIDTH} from '../components/PingPong/Props'
 import Ball from '../components/PingPong/ball'
 import User1 from '../components/PingPong/user1'
 import User2 from '../components/PingPong/user2'
-
-const MAX_HEIGHT = 600, MAX_WIDTH = 400
-
-const ballProps = {
-  x: MAX_HEIGHT/2 - 10,
-  y: MAX_WIDTH/2 - 10,
-  velocityX: 5,
-  velocityY: 0,
-}
-
-const user1Props = {
-  x : 10,
-  y : MAX_WIDTH/2 - 50
-}
-
-const user2Props = {
-  x : MAX_HEIGHT - 40,
-  y : MAX_WIDTH/2 - 50
-}
-
-const user = {
-  width:  100,
-  height: 20
-}
 
 export default class App extends React.Component {
   constructor(props) {

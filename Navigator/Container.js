@@ -14,7 +14,7 @@ export default function Container({ navigation }) {
         {id: 7, name: "Flappy Bird", img: require('../img/Bird/logo.png')},
         {id: 8, name: "Don't Let Him Die", img: require('../img/DontLetHimDie/player.png')},
         {id: 9, name: "Ping Pong", img: require('../img/Pong/pong.png')},
-        {id: 10, name: "Comming Soon", img: require('../img/DontLetHimDie/player.png')}
+        {id: 10, name: "Coming Soon", img: require('../img/DontLetHimDie/player.png')}
     ]
 
     return (
