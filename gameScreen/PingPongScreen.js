@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native'
-import { Audio } from 'expo-av'
+import { Text, View, StyleSheet } from 'react-native';
+import { Audio }  from 'expo-av'
 import Ball from '../components/PingPong/ball'
 import User1 from '../components/PingPong/user1'
 import User2 from '../components/PingPong/user2'
@@ -15,24 +15,23 @@ const ballProps = {
 }
 
 const user1Props = {
-  x : 0,
+  x : 10,
   y : MAX_WIDTH/2 - 50
 }
 
 const user2Props = {
-  x : MAX_HEIGHT - 10,
+  x : MAX_HEIGHT - 40,
   y : MAX_WIDTH/2 - 50
 }
 
 const user = {
   width:  100,
-  height: 10
+  height: 20
 }
 
-export default class PingPongScreen extends React.Component {
+export default class App extends React.Component {
   constructor(props) {
     super(props)
-
     this.state = {
       speed: 7,
 
@@ -49,8 +48,16 @@ export default class PingPongScreen extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(this.update, 1000/50)
+    setInterval(() => {
+      this.update()
+      this.hitWall()
+    }, 1000/50)
   }
+
+  componentDidUpdate() {
+    this.checkStatus()
+  }
+
 
   async playSoundComScore() {
     const { sound } = await Audio.Sound.createAsync(
@@ -79,6 +86,7 @@ export default class PingPongScreen extends React.Component {
     )
     await sound.playAsync()
   }
+
 
   resetBall = () => {
     this.setState({
@@ -140,42 +148,49 @@ export default class PingPongScreen extends React.Component {
     return pLeft < bRight && pTop < bBottom && pRight > bLeft && pBottom > bTop
   }
 
-  update = () => {
-    const { ball, score1, score2, user1, user2, speed, velocityX, velocityY } = this.state
-
+  checkStatus = () => {
+    const { ball, score1, score2 } = this.state
     //check out of game area
-    if(ball[0] < 0) {
+    if(ball[0] < -15) {
       this.setState({ score2: score2 + 1})
-      this.playSoundComScore()
-      this.resetBall()
-    } else if(ball[0] + 20 > MAX_HEIGHT) {
-      this.setState({ score1: score1 + 1})
+      //play sound score2
       this.playSoundUserScore()
       this.resetBall()
+    } else if(ball[0] > MAX_HEIGHT + 10) {
+      this.setState({ score1: score1 + 1})
+      //play sound score 1
+      this.playSoundComScore()
+      this.resetBall()
     }
-    
-    //start ball
-    let newBall = [ball[0] + velocityX, ball[1] + velocityY]
-    this.setState({ ball: newBall })
-    
-    //simple AI
-    let bot = [user2[0], user2[1] + ((ball[1]- ( user2[1] + user.width/2))) * 0.1] 
-    this.setState({ user2: bot })
-    
-    // when the ball collides with bottom and top walls we inverse the velocityY.
+  }
+
+  // when the ball collides with bottom and top walls we inverse the velocityY.
+  hitWall = () => {
+    const { ball } = this.state
     if(ball[1] < 0 || ball[1] > MAX_WIDTH-20) {
       this.setState({ velocityY: -this.state.velocityY})
       this.playSoundWall()
     }
+  }
+
+  update = () => {
+    const { ball, user1, user2, speed, velocityX, velocityY } = this.state
+  
+    //start ball
+    let newBall = [ball[0] + velocityX, ball[1] + velocityY]
+    this.setState({ ball: newBall })
+
+    //simple AI
+    let bot = [user1[0], user1[1] + ((ball[1]- ( user1[1] + user.width/2))) * 0.5] 
+    this.setState({ user1: bot })
 
     //check player
-    let player = (ball[0] + 20 < MAX_HEIGHT/2) ? user1 : user2
+    let player = (ball[0] + 10 < MAX_HEIGHT/2) ? user1 : user2
 
     // if the ball hits a paddle
     if(this.collision(ball, player)) {
-
+      //play sound hit
       this.playSoundHit()
-
       //check where the ball hit is
       let collidePoint = (ball[1]+10) - (player[1] + 50)
 
@@ -198,10 +213,10 @@ export default class PingPongScreen extends React.Component {
     return (
       <View style={styles.container}>
 
-        <View style={styles.containButton}>
+        {/* <View style={styles.containButton}>
           <Text onPress={() => this.moveUser1('left')} style={styles.button}>{'<'}</Text>
           <Text onPress={() => this.moveUser1('right')} style={styles.button}>{'>'}</Text>
-        </View>
+        </View> */}
 
         <View style={styles.gameArea}>
 
@@ -229,10 +244,10 @@ export default class PingPongScreen extends React.Component {
 
         </View>
 
-        {/* <View style={styles.containButton}>
+        <View style={styles.containButton}>
           <Text onPress={() => this.moveUser2('left')} style={styles.button}>{'<'}</Text>
           <Text onPress={() => this.moveUser2('right')} style={styles.button}>{'>'}</Text>
-        </View> */}
+        </View>
 
       </View>
     )
@@ -250,8 +265,9 @@ const styles = StyleSheet.create({
     width: MAX_WIDTH,
     height: MAX_HEIGHT,
     position: 'relative',
-    backgroundColor: '#fff',
-    borderWidth: 1
+    backgroundColor: '#000',
+    borderWidth: 1,
+    borderColor: '#fff'
   },
   containButton: {
     flexDirection: 'row'
