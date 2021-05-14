@@ -6,7 +6,7 @@ import Ball from '../components/PingPong/ball'
 import User1 from '../components/PingPong/user1'
 import User2 from '../components/PingPong/user2'
 
-export default class App extends React.Component {
+export default class PingPongScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
