@@ -1,4 +1,4 @@
-#include package, add dependences: 
+install package: 
 
 npm install --save react-native-vector-icons
 
