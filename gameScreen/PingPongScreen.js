@@ -95,7 +95,6 @@ export default class PingPongScreen extends React.Component {
         gap = 0
     }
     let newUser = [user1[0], user1[1] + gap]
-    console.log(newUser[1])
     this.setState({ user1: newUser})
   }
 
@@ -325,7 +324,7 @@ export default class PingPongScreen extends React.Component {
             <View style={styles.menu}>
               <Text style={styles.choice1} onPress={() => this.handleChoose('hard')}>HARD</Text>
               <Text style={styles.choice1} onPress={() => this.handleChoose('medium')}>MEDIUM</Text>
-              <Text style={styles.choice1} onPress={() => this.handleChoose('easy')}>HARD</Text>
+              <Text style={styles.choice1} onPress={() => this.handleChoose('easy')}>EASY</Text>
               <Text style={styles.smallButton} onPress={() => this.setState({ direction: 'choose' })}>GO BACK</Text>
             </View>
           )}
