@@ -33,6 +33,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      nets: [0, 40, 80, 120, 160, 200, 240, 280, 320, 360],
       speed: 7,
 
       ball: [ballProps.x, ballProps.y],
@@ -209,7 +210,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { ball, user1, user2, score1, score2 } = this.state
+    const { ball, user1, user2, score1, score2, nets } = this.state
     return (
       <View style={styles.container}>
 
@@ -231,6 +232,19 @@ export default class App extends React.Component {
           <View style={styles.pointArea1}>
             <Text style={styles.score}>{score1}</Text>
           </View>
+
+          {nets.map((right, i) => {
+            return <View style={{
+              position: 'absolute',
+              width: 20,
+              height: 2,
+              backgroundColor: '#fff',
+              top: MAX_HEIGHT/2 - 1,
+              right: right
+            }}
+              key={i}
+            />
+          })}
 
           <User2
             width={user.width} 
