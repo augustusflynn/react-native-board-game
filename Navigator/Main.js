@@ -28,7 +28,7 @@ export default function Main() {
                 <Stack.Screen name="Flappy Bird" component={BirdScreen} />
                 <Stack.Screen name="Don't Let Him Die" component={DontLetHimDie} />
                 <Stack.Screen name="Ping Pong" component={PingPongScreen} />
-                <Stack.Screen name="Comming Soon" component={Container} />
+                <Stack.Screen name="Coming Soon" component={Container}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -1,4 +1,4 @@
-#include package, add dependences: 
+install package: 
 
 npm install --save react-native-vector-icons
 
@@ -8,5 +8,3 @@ expo install react-native-gesture-handler react-native-reanimated react-native-s
 npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
 
 expo install expo-av
-
-git remote add origin https://github.com/augustustung/name.git
