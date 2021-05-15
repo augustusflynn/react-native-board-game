@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, ImageBackground, Image } from 'react-native';
+import { Text, View, StyleSheet, Image } from 'react-native';
 import { Audio }  from 'expo-av'
 import { ballProps, user1Props, user2Props, user, MAX_HEIGHT, MAX_WIDTH} from '../components/PingPong/Props'
 import Ball from '../components/PingPong/ball'
