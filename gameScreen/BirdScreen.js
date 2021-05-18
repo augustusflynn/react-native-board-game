@@ -120,6 +120,7 @@ export default function App() {
         birdBottom > obstaclesNegHeightTwo + obstacleHeight + gap - 30) &&
         obstaclesLeftTwo > screenWidth / 2 - 30 &&
         obstaclesLeftTwo < screenWidth / 2 + 30)
+      || birdBottom < 0 || birdBottom + 1.5*birdHeight > screenHeight
     ) {
       // console.log('game over')
       gameOver()

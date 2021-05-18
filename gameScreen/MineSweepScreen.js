@@ -26,7 +26,7 @@ export default class MineSweepScreen extends React.Component {
 
     onDie = () => {
         this.playSoundBoom()
-        Alert.alert("Ooops, you stepped on a boom! What a shame")
+        Alert.alert("Oops, you stepped on a boom! What a shame")
         for (let i = 0; i < Constants.BOARD_SIZE; i++) {
             for (let j = 0; j < Constants.BOARD_SIZE; j++) {
                 this.grid[i][j].revealWithoutCallback()
