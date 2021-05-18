@@ -6,7 +6,7 @@ import ListItem from './list'
 
 export default function Container({ navigation }) {
     const [loaded] = useFonts({
-        Pixel: require('../Font/Pixel.tff'),
+        Pixel: require('../Font/Pixel.ttf'),
         FlappyBird: require('../Font/FlappyBird.ttf')
     })
 

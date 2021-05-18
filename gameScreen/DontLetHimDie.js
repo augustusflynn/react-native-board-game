@@ -71,7 +71,7 @@ export default function App() {
 
   async function playSoundRight() {
     const { sound } = await Audio.Sound.createAsync(
-      require('../audio/DontLetHimDieSounds/right.mp3')
+      require('../audio/DontLetHimDieSounds/left.mp3')
     )
     await sound.playAsync()
   }

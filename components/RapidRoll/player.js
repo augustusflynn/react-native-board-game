@@ -4,11 +4,9 @@ import { View, Image } from 'react-native'
 export default Player = ({ width, height, player }) => {
   return (
     <View style={{
-      backgroundColor: '#fff', 
       position: 'absolute',
       left: player[0], 
-      top: player[1],
-      borderRadius: 100
+      top: player[1]
     }}>
       <Image 
         source={require('../../img/RapidRoll/player.png')}

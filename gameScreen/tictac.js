@@ -121,12 +121,9 @@ export default class TicTacToeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{position: 'relative', flexDirection:'row',maxWidth: 600, maxHeight: 300, backgroundColor: '#ddd'}}>
-          <Image source={require('../img/Tictac/logo.png')} style={{width: 300, height: 60}}/>
-        </View>
-        <View style={{paddingTop: 55}}/>
+        <Image source={require('../img/Tictac/logo.png')} style={{width: 300, height: 60, top: '2%'}}/>
 
-        <View style={[styles.point, {flexDirection: "row"}]}>
+        <View style={styles.point}>
           <Text style={styles.player1}>Player 1</Text>
           <Text style={styles.score1}>{this.state.player1}</Text>
           <Text style={styles.score2}>{this.state.player2}</Text>
@@ -134,7 +131,7 @@ export default class TicTacToeScreen extends React.Component {
         </View>
         <View style={{ paddingTop: 30 }}/>
 
-        <View style={{backgroundColor: "#350006"}}>
+        <View style={{top: '7%'}}>
           <View  style={{ flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
             <TouchableOpacity onPress={() => this.onTilePress(0, 0)}  style={[styles.tile, { marginRight: 15, marginBottom: 15 }]}>
               {this.renderIcons(0, 0)}
@@ -171,8 +168,6 @@ export default class TicTacToeScreen extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-
-        <View style={{ paddingTop: 35 }}/>
         
         <TouchableOpacity style={styles.btn} onPress={() => this.initializeGame()}>
           <Text style={{fontSize:20, fontFamily: 'Arial', fontWeight: 'bold',color:'#a71829',}}>New Game</Text>
@@ -188,7 +183,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#350006',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   tile: {
     backgroundColor: '#d2b414',
@@ -231,7 +225,7 @@ const styles = StyleSheet.create({
   },
   player1: {
     fontWeight: 'bold',
-    color: 'red',
+    color: '#d20000',
     paddingHorizontal: 10,
     fontSize: 25,
     shadowColor: '#000',
@@ -240,7 +234,7 @@ const styles = StyleSheet.create({
   },
   player2: {
     fontWeight: 'bold',
-    color:'green',
+    color:'#005f00',
     paddingHorizontal: 10,
     fontSize: 25,
     shadowColor: '#000',
@@ -253,19 +247,19 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     fontSize: 10,
     width: 400,
-    backgroundColor: "#ffcc80",
+    backgroundColor: "#d2b414",
     justifyContent:"center",
-    borderColor: "#ddd",
     padding: 16,
-    shadowColor: '#d5b88d',
+    shadowColor: '#f49c1e',
     shadowOpacity: 1,
-    shadowOffset: {width: 10, height: 10},
+    shadowOffset: {width: 0, height: 0},
+    flexDirection: 'row',
+    top: '7%'
   },
   btn: {
     borderRadius: 30,
     borderWidth: 2,
     borderColor: '#a71829',
-    marginHorizontal: 10,
     width: 160, 
     height: 50,
     justifyContent:'center', 
@@ -274,5 +268,6 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.3,
     shadowOffset: {width: 0, height: 3},
+    top: '12%'
   }
 });

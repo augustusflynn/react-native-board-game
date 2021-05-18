@@ -71,9 +71,7 @@ export default function TabScreen() {
     if(status=='Play'){
         return (
             <View style={styles.container}>
-                <View style={{paddingBottom: 16}}>
-                    <Image source={require('../img/tabtheblack/logo.png')} style={{width: 350, height: 80, top: 30}}/>
-                </View>
+                <Image source={require('../img/tabtheblack/logo.png')} style={{width: 350, height: 80, top: '1%'}}/>
                 <Text style={styles.score1}>Score: {score}</Text>
                 <View style={styles.flatlist}>
                     <FlatList 
@@ -132,22 +130,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    flatlist: { 
-        shadowColor: '#4a4a4a', 
-        shadowOpacity: 0.8, 
-        shadowOffset: {width: 10, height: 10},
-        backgroundColor: '#b1b0b0',
-        flexGrow: 0,
-        bottom: -30,
-        height: 338,
-        width: 338,
-        borderRadius: 20,
-        borderWidth: 2,
-        borderColor: "#49470a"
-    },
     score1: {
         fontSize: 40,
-        paddingVertical: 20,
+        top: '8%',
         position: 'relative',
         fontFamily: 'Arial',
         shadowColor: '#000',
@@ -155,6 +140,19 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         fontWeight: 'bold',
         
+    },
+    flatlist: { 
+        shadowColor: '#4a4a4a', 
+        shadowOpacity: 0.8, 
+        shadowOffset: {width: 10, height: 10},
+        backgroundColor: '#b1b0b0',
+        flexGrow: 0,
+        top: '13%',
+        height: 338,
+        width: 338,
+        borderRadius: 20,
+        borderWidth: 2,
+        borderColor: "#49470a"
     },
     tile: {
         borderWidth: 2,

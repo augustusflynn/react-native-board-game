@@ -275,7 +275,6 @@ export default class SnakeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#d7d7d7'
   },
@@ -285,7 +284,8 @@ const styles = StyleSheet.create({
     borderWidth: 7,
     width: BOARD_SIZE,
     height: BOARD_SIZE,
-    backgroundColor: '#a4c78d'
+    backgroundColor: '#a4c78d',
+    top: '1%'
   },
   start: {
     position: 'absolute',
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     flexDirection: 'column',
-    paddingTop: 24,
+    top: '3%'
   },
   controlRow: {
     height: 100,

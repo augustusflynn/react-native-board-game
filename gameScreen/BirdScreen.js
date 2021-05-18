@@ -214,11 +214,10 @@ export default function App() {
         <View style={styles.point}>
           <Text style={styles.highScore}>Highest Score: {highestScore}</Text>
           <Text style={styles.score}>Your Score: {score}</Text>
-          <Text style={styles.re}>Try again. . . ?</Text>
         </View>
         <View style={{ justifyContent: "center", alignItems: "center" }}>
           <TouchableOpacity onPress={initializeGame} style={styles.button}>
-            <Icon name="reload" size={25} color={"#796c47"} />
+            <Icon name="reload" size={25} color={"#fff"} />
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -229,7 +228,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ddd",
   },
   board: {
     flex: 1,
@@ -237,35 +235,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   point: {
-    padding: 16,
-    margin: 16,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 0 },
   },
   highScore: {
     fontSize: 35,
     position: "relative",
-    fontFamily: "Arial",
-    shadowColor: "#000",
-    shadowOffset: { width: -5, height: 3 },
-    shadowOpacity: 0.5,
-    color: "#675d41",
     fontWeight: "bold",
+    fontFamily: "FlappyBird",
+    color: "#fff",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0},
+    shadowOpacity: 1
   },
   score: {
     fontSize: 25,
-    fontFamily: "Arial",
-    shadowColor: "#000",
-    shadowOffset: { width: -5, height: 3 },
-    color: "#796c47",
-    shadowOpacity: 0.5,
     paddingVertical: 16,
-  },
-  re: {
-    fontSize: 20,
-    color: "#796c47",
+    fontFamily: "FlappyBird",
+    color: "#fff",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0},
+    shadowOpacity: 1
   },
   button: {
     width: 125,
@@ -273,7 +263,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(204,204,0)",
     shadowColor: "rgb(163,163,0)",
     shadowOpacity: 1,
-    shadowOffset: { width: 3, height: 3 },
+    shadowOffset: { width: 0, height: 0 },
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,

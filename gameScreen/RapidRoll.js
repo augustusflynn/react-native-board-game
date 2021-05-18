@@ -1,5 +1,4 @@
 import React from 'react'
-import * as Font from 'expo-font'
 import { Text, View, StyleSheet, Animated, TouchableWithoutFeedback, Image } from 'react-native'
 import { MAX_WIDTH, MAX_HEIGHT, BAR, PLAYER, WIDTH, HEIGHT } from '../components/RapidRoll/props'
 import Bar from '../components/RapidRoll/bar'
@@ -39,11 +38,16 @@ export default class RapidRollScreen extends React.Component {
   }
 
   checkCollision = () => {
-    const { player, score, highestScore } = this.state
+    const { player, bar4, bar2 } = this.state
     if(player[1] > MAX_HEIGHT - PLAYER.height || player[1] < 0) {
       this.gameOver()
     }
-    if(score > highestScore) this.setState({ highestScore: score })
+    // if obstacles contain player, so end game 
+    if(this.checkPlayerOnEachBar(bar2, player) ||
+    this.checkPlayerOnEachBar(bar4, player) 
+    ) {
+      this.gameOver()
+    }
   }
 
   checkPlayerOnEachBar = (b, p) => {
@@ -51,7 +55,8 @@ export default class RapidRollScreen extends React.Component {
     let pLeft = p[0], pRight = p[0] + PLAYER.width, pTop = p[1] ,pBottom = p[1] + PLAYER.height
 
     let bLeft = b[0], bRight = b[0] + BAR.width, bTop = b[1], bBottom = b[1] + BAR.height
-    return pLeft < bRight && pRight > bLeft && (bTop - pBottom < 15 && bTop - pBottom >= 0)
+    // if(speed < 15)  return pLeft < bRight && pRight > bLeft && (bTop - pBottom <= 30 && bTop - pBottom >= 0)
+    return pLeft < bRight && pRight > bLeft && (bBottom - pBottom <= 50 && bBottom - pBottom >= 0)
   }
 
   componentDidMount() {
@@ -66,11 +71,11 @@ export default class RapidRollScreen extends React.Component {
     const { player, increasing } = this.state
     let gap
     if(increasing == 'left')  {
-      if(player[0] > 0) gap = -8
+      if(player[0] > 0) gap = -15
       else gap = 0
     }
     else if(increasing == 'right') {
-      if(player[0] < MAX_WIDTH - PLAYER.width)  gap = 8
+      if(player[0] < MAX_WIDTH - PLAYER.width)  gap = 15
       else gap = 0
     }
     else gap = 0
@@ -79,14 +84,14 @@ export default class RapidRollScreen extends React.Component {
   }
 
   gameOver = () => { 
-    let lastPlayer
-    lastPlayer = [left[3], 260 - PLAYER.height]
-
+    let lastPlayer = [left[5], 100]
+    const { score, highestScore } = this.state
     this.setState({
       player: lastPlayer,
       isGameOver: true,
       increasing: false
     })
+    if(score > highestScore) this.setState({ highestScore: score })
 
     Animated.timing(this.animatedScore, {
       toValue: -30,
@@ -111,9 +116,8 @@ export default class RapidRollScreen extends React.Component {
   }
 
   handleStart = () => {
-    this.setState({ isStart: true, speed: 0.5 })
+    this.setState({ isStart: true, speed: 1.5, score: 10 })
   }
-
 
   initial = () => {
     this.animatedScore.setValue(HEIGHT)
@@ -131,37 +135,36 @@ export default class RapidRollScreen extends React.Component {
       isGameOver: false,
       direction: 'save',
       increasing: 'null',
-      speed: 0.5,
+      speed: 1.5,
       playerSpeed: -5,
     })
-  }
-
-  increasingSpeed = () => {
-    const { score } = this.state
-    let newSpeed
-    if(score == 15) newSpeed = 0.7
-    else if(score == 25) newSpeed = 0.9
-    else if(score == 35) newSpeed = 1.2
-    this.setState({ speed: newSpeed })
   }
 
   movePlayer = (direction) => {
     let gap
     const { player } = this.state
     if(direction == 'left') {
-      if(player[0] > 0) gap = - 8
+      if(player[0] > 0) gap = - 15
       else gap = 0
     } else {
-      if(player[0] < MAX_WIDTH - PLAYER.width) gap = 8
+      if(player[0] < MAX_WIDTH - PLAYER.width) gap = 15
       else gap = 0
     }
 
     let newPlayer = [player[0] + gap, player[1]]
     this.setState({ player: newPlayer })
+
   }
 
+  // speedUp = () => {
+  //   const { score } = this.state
+  //   if(score == 15) {
+  //     this.setState({ speed: 1.5 })
+  //   }
+  // }
+
   startGame = () => {
-    const { bar0, bar1, bar2, bar3, bar4, bar5, player, speed, playerSpeed, isGameOver, direction, isStart, score } = this.state
+    const { bar0, bar1, bar2, bar3, bar4, bar5, player, speed, playerSpeed, isGameOver, direction, score } = this.state
     let gap = 5 * speed
 
     //direction will determind player will up or down
@@ -174,16 +177,6 @@ export default class RapidRollScreen extends React.Component {
         break
       default: 
         break
-    }
-    //check if bar contain player set direction
-    if(this.checkPlayerOnEachBar(bar3, player) || 
-      this.checkPlayerOnEachBar(bar0, player) || 
-      this.checkPlayerOnEachBar(bar1, player) ||
-      this.checkPlayerOnEachBar(bar5, player) 
-    ) {
-      this.setState({ direction: 'save' })
-    } else {
-      this.setState({ direction: 'space' })
     }
 
     //bar0
@@ -262,24 +255,31 @@ export default class RapidRollScreen extends React.Component {
     this.setState({
       player: newPlayer
     })
-    // if obstacles contain player, so end game 
-    if(this.checkPlayerOnEachBar(bar2, player) ||
-      this.checkPlayerOnEachBar(bar4, player) 
+    //check if bar contain player set direction
+    if(this.checkPlayerOnEachBar(bar3, player) || 
+      this.checkPlayerOnEachBar(bar0, player) || 
+      this.checkPlayerOnEachBar(bar1, player) ||
+      this.checkPlayerOnEachBar(bar5, player) 
     ) {
-      this.gameOver()
+      this.setState({ direction: 'save' })
+    } else {
+      this.setState({ direction: 'space' })
     }
 
-    //increasing speed each time reset the bar, if game over speed = 0
+    //if game over speed = 0
     if(isGameOver) {
       this.setState({
         speed: 0,
         playerSpeed: 0
       })
     }
+
+    // this.speedUp()
   }
 
   render() {
     const { bar0, bar1, bar2, bar3, bar4, bar5, player, isGameOver, isStart, score, highestScore } = this.state
+    const { navigation } = this.props
       return (
         <View style={styles.container}>
           <Text style={styles.score}>You Made: {score}</Text>
@@ -288,7 +288,7 @@ export default class RapidRollScreen extends React.Component {
 
               <Image 
                 source={require('../img/RapidRoll/wall.png')}
-                style={{position: 'absolute', left: -20, height: MAX_HEIGHT+15, width: 20, zIndex: 2}}
+                style={{position: 'absolute', left: -20, height: MAX_HEIGHT, width: 20, zIndex: 2}}
               />
               <Image 
                 source={require('../img/RapidRoll/wall.png')} 
