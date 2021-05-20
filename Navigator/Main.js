@@ -12,6 +12,7 @@ import BirdScreen from '../gameScreen/BirdScreen'
 import DontLetHimDie from '../gameScreen/DontLetHimDie'
 import PingPongScreen from '../gameScreen/PingPongScreen'
 import RapidRollScreen from '../gameScreen/RapidRoll'
+import Screen2048 from '../gameScreen/Screen2048'
 
 const Stack = createStackNavigator()
 
@@ -30,6 +31,7 @@ export default function Main() {
                 <Stack.Screen name="Don't Let Him Die" component={DontLetHimDie} />
                 <Stack.Screen name="Ping Pong" component={PingPongScreen} />
                 <Stack.Screen name="Rapid Roll" component={RapidRollScreen}/>
+                <Stack.Screen name="2048" component={Screen2048}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

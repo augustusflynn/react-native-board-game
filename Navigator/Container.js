@@ -13,6 +13,7 @@ export default function Container({ navigation }) {
     if(!loaded) return null
 
     const item = [
+        {id: 0, name: "2048", img: require('../img/2048/logo.png')},
         {id: 1, name: "Ball Juggling", img: require('../img/Soccer/soccer.png')},
         {id: 2, name: "Dino Game", img: require('../img/Dinogame/1.png')},
         {id: 3, name: "Don't Let Him Die", img: require('../img/DontLetHimDie/player.png')},
@@ -23,6 +24,7 @@ export default function Container({ navigation }) {
         {id: 8, name: "Snake", img: require('../img/Snake/1.png')},
         {id: 9, name: "Tab The Black", img: require('../img/tabtheblack/1.png')},
         {id: 10, name: "Tic Tac Toe", img: require('../img/Tictac/1.png')},
+        {id: 11, name: "Coming Soon", img: require('../img/Tictac/1.png')},
     ]
 
     return (
