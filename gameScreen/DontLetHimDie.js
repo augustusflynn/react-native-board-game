@@ -99,7 +99,6 @@ export default function App() {
     if (enemyTwoStartPos < 200) {
       enemyTwoTimer = setInterval(() => {
         setEnemyTwoStartPos((prev) => prev + 50);
-        console.log(enemyStartPos)
       }, enemySpeed);
 
       return () => {
@@ -140,7 +139,6 @@ export default function App() {
   })
 
   const gameOver = () => {
-    // console.log("game over")
     setEnemySpeed(99999)
     clearInterval(enemyTwoTimer);
     clearInterval(enemyTimer);

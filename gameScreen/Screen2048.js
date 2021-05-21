@@ -292,7 +292,7 @@ export default class Screen2048 extends Component {
   render() {
     const { grid, score, highestScore, gameLose } = this.state
     const config = {
-      velocityThreshold: 1,
+      velocityThreshold: 0.3,
       directionalOffsetThreshold: 80
     };
     return (
@@ -479,7 +479,7 @@ const styles = StyleSheet.create({
     },
     logo: {
       left: 8,
-      fontSize: 70, 
+      fontSize: 60, 
       flex: 2,
       color: '#776e65', 
       fontWeight: 'bold'

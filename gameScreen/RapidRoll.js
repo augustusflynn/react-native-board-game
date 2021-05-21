@@ -396,7 +396,8 @@ const styles = StyleSheet.create({
   score: {
     fontSize: 25,
     fontWeight: 'bold',
-    top: '8%',
+    top: 0,
+    position: 'absolute',
     alignSelf: 'center',
     fontFamily: 'Pixel'
   },
@@ -404,7 +405,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     flex: 1, 
     alignSelf: 'center',
-    top: '25%'
+    position: 'absolute',
+    bottom: 0,
   },
   btnLeft: {
     width: 150, 

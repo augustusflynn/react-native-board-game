@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableOpacity, StyleSheet, Alert, Text, Image } from 'react-native'
+import { View, TouchableOpacity, StyleSheet, Alert, Text, Image, Dimensions } from 'react-native'
 import Constants from '../components/MineSweep/Constants'
 import Cell from '../components/MineSweep/Cell'
 import { Audio } from 'expo-av'
@@ -114,6 +114,8 @@ export default class MineSweepScreen extends React.Component {
     }
 }
 
+const SCREEN_WIDTH  = Dimensions.get('window').width
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -124,7 +126,7 @@ const styles = StyleSheet.create({
     button: {
         width: 110,
         height: 50,
-        position: 'relative',
+        position: 'absolute',
         backgroundColor: '#bdbdbd',
         borderWidth: 2,
         borderTopColor: '#fff',
@@ -133,8 +135,9 @@ const styles = StyleSheet.create({
         borderBottomColor: '#7d7d7d',
         justifyContent: 'center',
         alignItems: 'center',
+        bottom: 5
     },
     img: {
-        maxWidth: 450
+        width: SCREEN_WIDTH,
     }
 })

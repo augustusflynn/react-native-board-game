@@ -2,17 +2,19 @@ import React from 'react'
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   Alert,
   Text,
+  Dimensions
 } from 'react-native'
+import GestureRecognizer from 'react-native-swipe-gestures';
 import { Audio } from 'expo-av';
 import Snake from '../components/Snake/snake'
 import Food from '../components/Snake/food'
 
 const GRID_SIZE = 15
-const CELL_SIZE = 20
-const BOARD_SIZE = GRID_SIZE * CELL_SIZE
+const SCREEN_WIDTH = Dimensions.get('window').width
+const BOARD_SIZE = SCREEN_WIDTH
+const BOARD_SIZE_HEIGHT = SCREEN_WIDTH - 100
 
 const randomFood = () => {
   let max = 19, min = 0
@@ -24,13 +26,11 @@ const randomFood = () => {
 export default class SnakeScreen extends React.Component {
   state = {
     snakeDots: [
-      // [0, 0],
       [3, 7],
     ],
     food: randomFood(),
     direction: 'PLAY',
-    // status: 'READY',
-    speed: 200,
+    speed: 120,
     curScore: 1,
     highestScore: 0
   }
@@ -43,7 +43,7 @@ export default class SnakeScreen extends React.Component {
   componentDidUpdate() {
     const { curScore, highestScore } = this.state
     this.checkIfOutBorder()
-    this.checkIfCollap()
+    this.checkIfCollision()
     this.checkIfEat()
     if(curScore > highestScore){
       this.setState({highestScore: curScore})
@@ -147,7 +147,7 @@ export default class SnakeScreen extends React.Component {
     })
   }
 
-  checkIfCollap = () => {
+  checkIfCollision = () => {
     let snake = [...this.state.snakeDots]
     let head = snake[snake.length - 1]
     snake.pop()
@@ -162,12 +162,15 @@ export default class SnakeScreen extends React.Component {
 
   checkIfOutBorder = () => {
     let head = this.state.snakeDots[this.state.snakeDots.length - 1]
+    let x = BOARD_SIZE/GRID_SIZE
+    let y = BOARD_SIZE_HEIGHT/GRID_SIZE
     if ( 
-      head[0] >= 19 || 
-      head[1] >= 19 || 
+      head[0] >= x - 1.5|| 
+      head[1] >= y -1.5|| 
       head[0] < 0 || 
       head[1] < 0
     ) {
+      console.log(head)
       this.gameOver()
       this.playSoundDead()
     }
@@ -198,77 +201,27 @@ export default class SnakeScreen extends React.Component {
   }
 
   render() {
-    const { snakeDots, food, direction, status } = this.state
-      // if(status == "READY") {
-      //   return (
-      //     <View style={styles.container} >
-      //       <Text>Select Mode</Text>
-      //       <View>
-      //         <TouchableOpacity onPress={() => this.setState({ speed: 1000, status: "START"})} >
-      //           <Text>EASY</Text>
-      //         </TouchableOpacity>
-
-      //         <TouchableOpacity onPress={() => this.setState({ speed: 300, status: "START"})}>
-      //           <Text>NORMAL</Text>
-      //         </TouchableOpacity>
-
-      //         <TouchableOpacity onPress={() => this.setState({ speed:  1, status: "START"})} >
-      //           <Text>HARD</Text>
-      //         </TouchableOpacity>
-      //       </View>
-      //     </View>
-      //     )
-      // } else {
-        return (
-          <View style={styles.container}>
-            <View style={styles.gameArea}>
-            {(direction == 'PLAY') && <Text style={styles.start}>PRESS ANY BUTTON TO PLAY</Text>}
-            <Snake snakeDots={snakeDots} size={GRID_SIZE} />
-            <Food dot={food} size={GRID_SIZE} />
-          </View>
-  
-            <View style={styles.controls}>
-              <View style={styles.controlRow}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ direction: 'UP' })
-                    this.playSoundUp()
-                    }}>
-                  <View style={styles.control} />
-                </TouchableOpacity>
-              </View>
-    
-              <View style={styles.controlRow}>
-                <TouchableOpacity
-                  onPress={() => {
-                      this.setState({ direction: 'LEFT' })
-                      this.playSoundLeft()
-                      }}>
-                  <View style={styles.control} />
-                </TouchableOpacity>
-                <View style={[styles.control, { backgroundColor: null }]} />
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ direction: 'RIGHT' })
-                    this.playSoundRight()
-                    }}>
-                  <View style={styles.control} />
-                </TouchableOpacity>
-              </View>
-    
-              <View style={styles.controlRow}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ direction: 'DOWN' })
-                    this.playSoundDown()
-                  }}>
-                  <View style={styles.control} />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        )
-      // }
+    const { snakeDots, food, direction } = this.state
+    const config = {
+      velocityThreshold: 0.3,
+      directionalOffsetThreshold: 80
+    }
+    return (
+      <GestureRecognizer
+        onSwipeUp={(state) => this.setState({ direction: 'UP'})}
+        onSwipeDown={(state) => this.setState({ direction: 'DOWN'})}
+        onSwipeLeft={(state) => this.setState({ direction: 'LEFT'})}
+        onSwipeRight={(state) => this.setState({ direction: 'RIGHT'})}
+        config={config}
+        style={styles.container}
+      >
+        {(direction == 'PLAY') && <Text style={styles.start}>SWIPE TO PLAY</Text>}
+        <View style={styles.gameArea}>
+          <Snake snakeDots={snakeDots} size={GRID_SIZE} />
+          <Food dot={food} size={GRID_SIZE} />
+        </View>
+      </GestureRecognizer>
+    )
   }
 }
 
@@ -283,7 +236,7 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderWidth: 7,
     width: BOARD_SIZE,
-    height: BOARD_SIZE,
+    height: BOARD_SIZE_HEIGHT,
     backgroundColor: '#a4c78d',
     top: '1%'
   },
@@ -292,25 +245,5 @@ const styles = StyleSheet.create({
     bottom: '10%',
     left: '14%',
     fontWeight: 'bold'
-  },
-  controls: {
-    width: 300,
-    height: 300,
-    flexDirection: 'column',
-    top: '3%'
-  },
-  controlRow: {
-    height: 100,
-    width: 300,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  control: {
-    width: 100,
-    height: 100,
-    backgroundColor: '#070705',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  }
 })

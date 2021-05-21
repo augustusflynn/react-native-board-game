@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { View, Text ,StyleSheet, FlatList, TouchableOpacity, Image, Dimensions  } from 'react-native'
 import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons'
 import { Audio } from 'expo-av';
+const x = Dimensions.get('screen').width
+const y = Dimensions.get('screen').height
 
 export default function TabScreen() {
-    const x = Dimensions.get('screen').width
-    const y = Dimensions.get('screen').height
     let [time, setTime] = useState(3000)
     let [blocks, setBlocks] = useState(blocksArr)
     let [score, setScore] = useState(0)
