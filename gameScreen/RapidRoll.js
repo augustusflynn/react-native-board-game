@@ -116,7 +116,7 @@ export default class RapidRollScreen extends React.Component {
   }
 
   handleStart = () => {
-    this.setState({ isStart: true, speed: 1.5, score: 10 })
+    this.setState({ isStart: true, speed: 1.5, score: 0 })
   }
 
   initial = () => {
@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
   score: {
     fontSize: 25,
     fontWeight: 'bold',
-    top: 0,
+    top: 5,
     position: 'absolute',
     alignSelf: 'center',
     fontFamily: 'Pixel'

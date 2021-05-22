@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons';
 import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Alert, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Image, Dimensions, SafeAreaView } from 'react-native';
 
 export default class TicTacToeScreen extends React.Component {
   constructor(props){
@@ -120,63 +120,64 @@ export default class TicTacToeScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Image source={require('../img/Tictac/logo.png')} style={{width: 300, height: 60, top: '2%'}}/>
+        <View style={styles.container}>
+          <Image source={require('../img/Tictac/logo.png')} style={{width: 300, height: 60, top: '2%'}}/>
 
-        <View style={styles.point}>
-          <Text style={styles.player1}>Player 1</Text>
-          <Text style={styles.score1}>{this.state.player1}</Text>
-          <Text style={styles.score2}>{this.state.player2}</Text>
-          <Text style={styles.player2}>Player 2</Text>
+          <View style={styles.point}>
+            <Text style={styles.player1}>Player 1</Text>
+            <Text style={styles.score1}>{this.state.player1}</Text>
+            <Text style={styles.score2}>{this.state.player2}</Text>
+            <Text style={styles.player2}>Player 2</Text>
+          </View>
+
+          <View style={{top: '8%'}}>
+            <View  style={{ flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
+              <TouchableOpacity onPress={() => this.onTilePress(0, 0)}  style={[styles.tile, { marginRight: 10, marginBottom: 10 }]}>
+                {this.renderIcons(0, 0)}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.onTilePress(0, 1)} style={[styles.tile, { marginBottom: 10, marginRight: 10 }]}>
+                {this.renderIcons(0, 1)}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.onTilePress(0, 2)} style={[styles.tile, { marginBottom: 10 }]}>
+                {this.renderIcons(0, 2)}
+              </TouchableOpacity>
+            </View>
+
+            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+              <TouchableOpacity onPress={() => this.onTilePress(1, 0)} style={[styles.tile, { marginRight: 10, marginBottom: 10 }]}>
+                {this.renderIcons(1, 0)}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.onTilePress(1, 1)} style={[styles.tile, { marginRight: 10, marginBottom: 10 }]}>
+                {this.renderIcons(1, 1)}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.onTilePress(1, 2)} style={[styles.tile, { marginBottom: 10 }]}>
+              {this.renderIcons(1, 2)}
+              </TouchableOpacity>
+            </View>
+
+            <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+              <TouchableOpacity onPress={() => this.onTilePress(2, 0)} style={[styles.tile, { marginRight: 10 }]}>
+                {this.renderIcons(2, 0)}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.onTilePress(2, 1)} style={[styles.tile, { marginRight: 8 }]}>
+                {this.renderIcons(2, 1)}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.onTilePress(2, 2)} style={styles.tile}>
+                {this.renderIcons(2, 2)}
+              </TouchableOpacity>
+            </View>
+          </View>
+          
+          <TouchableOpacity style={styles.btn} onPress={() => this.initializeGame()}>
+            <Text style={{fontSize:20, fontWeight: 'bold',color:'#a71829',}}>New Game</Text>
+          </TouchableOpacity>
         </View>
-        <View style={{ paddingTop: 30 }}/>
-
-        <View style={{top: '7%'}}>
-          <View  style={{ flexDirection: "row", alignItems: "center", justifyContent: "center"}}>
-            <TouchableOpacity onPress={() => this.onTilePress(0, 0)}  style={[styles.tile, { marginRight: 15, marginBottom: 15 }]}>
-              {this.renderIcons(0, 0)}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onTilePress(0, 1)} style={[styles.tile, { marginBottom: 15, marginRight: 15 }]}>
-              {this.renderIcons(0, 1)}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onTilePress(0, 2)} style={[styles.tile, { marginBottom: 15 }]}>
-              {this.renderIcons(0, 2)}
-            </TouchableOpacity>
-          </View>
-
-          <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-            <TouchableOpacity onPress={() => this.onTilePress(1, 0)} style={[styles.tile, { marginRight: 15, marginBottom: 15 }]}>
-              {this.renderIcons(1, 0)}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onTilePress(1, 1)} style={[styles.tile, { marginRight: 15, marginBottom: 15 }]}>
-              {this.renderIcons(1, 1)}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onTilePress(1, 2)} style={[styles.tile, { marginBottom: 15 }]}>
-            {this.renderIcons(1, 2)}
-            </TouchableOpacity>
-          </View>
-
-          <View style={{flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-            <TouchableOpacity onPress={() => this.onTilePress(2, 0)} style={[styles.tile, { marginRight: 15 }]}>
-              {this.renderIcons(2, 0)}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onTilePress(2, 1)} style={[styles.tile, { marginRight: 15 }]}>
-              {this.renderIcons(2, 1)}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onTilePress(2, 2)} style={styles.tile}>
-              {this.renderIcons(2, 2)}
-            </TouchableOpacity>
-          </View>
-        </View>
-        
-        <TouchableOpacity style={styles.btn} onPress={() => this.initializeGame()}>
-          <Text style={{fontSize:20, fontFamily: 'Arial', fontWeight: 'bold',color:'#a71829',}}>New Game</Text>
-        </TouchableOpacity>
-      </View>
     );
   }
 }
 
+const SCREEN_WIDTH = Dimensions.get('window').width
+const SCREEN_HEIGHT = Dimensions.get('window').height
 
 const styles = StyleSheet.create({
   container: {
@@ -186,8 +187,8 @@ const styles = StyleSheet.create({
   },
   tile: {
     backgroundColor: '#d2b414',
-    width: 100,
-    height: 100, 
+    width: SCREEN_WIDTH/4,
+    height: SCREEN_WIDTH/4, 
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 20,
@@ -246,15 +247,15 @@ const styles = StyleSheet.create({
     borderColor: '#a71829',
     borderRadius: 20,
     fontSize: 10,
-    width: 400,
+    width: SCREEN_WIDTH,
     backgroundColor: "#d2b414",
     justifyContent:"center",
-    padding: 16,
     shadowColor: '#f49c1e',
     shadowOpacity: 1,
     shadowOffset: {width: 0, height: 0},
     flexDirection: 'row',
-    top: '7%'
+    top: '7%',
+    padding: 12
   },
   btn: {
     borderRadius: 30,

@@ -33,8 +33,8 @@ export default function App() {
   const enemyLeft = [60, MAX_WIDTH-120]
   const [enemyStartLeft, setEnemyStartLeft] = useState(enemyLeft[randomE()])
   const [enemyTwoStartLeft, setEnemyTwoStartLeft] = useState(enemyLeft[randomE()])
-  const [enemyStartPos, setEnemyStartPos] = useState(-MAX_HEIGHT);
-  const [enemyTwoStartPos, setEnemyTwoStartPos] = useState(-(MAX_HEIGHT+gap));
+  const [enemyStartPos, setEnemyStartPos] = useState(-MAX_HEIGHT+gap);
+  const [enemyTwoStartPos, setEnemyTwoStartPos] = useState(-MAX_HEIGHT);
   const [enemySpeed, setEnemySpeed] = useState(9999);
 
   const [start, setStart] = useState(false)

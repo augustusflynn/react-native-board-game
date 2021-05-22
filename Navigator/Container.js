@@ -24,7 +24,7 @@ export default function Container({ navigation }) {
         {id: 8, name: "Snake", img: require('../img/Snake/1.png')},
         {id: 9, name: "Tab The Black", img: require('../img/tabtheblack/1.png')},
         {id: 10, name: "Tic Tac Toe", img: require('../img/Tictac/1.png')},
-        {id: 11, name: "Coming Soon", img: require('../img/Tictac/1.png')},
+        {id: 11, name: "Coming Soon", img: require('../img/soon.png')},
     ]
 
     return (

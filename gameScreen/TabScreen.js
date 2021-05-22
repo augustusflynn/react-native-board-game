@@ -72,7 +72,6 @@ export default function TabScreen() {
         return (
             <View style={styles.container}>
                 <Image source={require('../img/tabtheblack/logo.png')} style={{width: 350, height: 80, top: '1%'}}/>
-                <Text style={styles.score1}>Score: {score}</Text>
                 <View style={styles.flatlist}>
                     <FlatList 
                         renderItem={({ item }) =>
@@ -130,17 +129,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    score1: {
-        fontSize: 40,
-        top: '8%',
-        position: 'relative',
-        fontFamily: 'Arial',
-        shadowColor: '#000',
-        shadowOffset: {width: -5, height: 3},
-        shadowOpacity: 0.5,
-        fontWeight: 'bold',
-        
-    },
     flatlist: { 
         shadowColor: '#4a4a4a', 
         shadowOpacity: 0.8, 
@@ -148,11 +136,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#b1b0b0',
         flexGrow: 0,
         top: '13%',
-        height: 338,
-        width: 338,
+        height: x*0.85,
+        width: x*0.85,
         borderRadius: 20,
         borderWidth: 2,
-        borderColor: "#49470a"
+        borderColor: "#49470a",
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: '25%'
     },
     tile: {
         borderWidth: 2,
@@ -160,8 +152,8 @@ const styles = StyleSheet.create({
         margin: 10,
         borderColor: '#929292',
         backgroundColor: '#ffffff',
-        width: 90,
-        height: 90,
+        width: x*0.85*0.25,
+        height: x*0.85*0.25,
         alignItems: "center",
         justifyContent: "center",
         shadowColor: '#4a4a4a', 
@@ -174,10 +166,8 @@ const styles = StyleSheet.create({
         margin: 10,
         borderColor: '#929292',
         backgroundColor: "black",
-        width: 90,
-        height: 90, 
-        alignItems: "center",
-        justifyContent: "center",
+        width: x*0.85*0.25,
+        height: x*0.85*0.25,
         shadowColor: '#4a4a4a', 
         shadowOpacity: 1, 
         shadowOffset: {width: 3, height: 5},
