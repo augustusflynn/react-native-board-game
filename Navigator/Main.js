@@ -13,6 +13,7 @@ import DontLetHimDie from '../gameScreen/DontLetHimDie'
 import PingPongScreen from '../gameScreen/PingPongScreen'
 import RapidRollScreen from '../gameScreen/RapidRoll'
 import Screen2048 from '../gameScreen/Screen2048'
+import ComingSoon from '../gameScreen/ComingSoon'
 
 const Stack = createStackNavigator()
 
@@ -32,6 +33,7 @@ export default function Main() {
                 <Stack.Screen name="Ping Pong" component={PingPongScreen} />
                 <Stack.Screen name="Rapid Roll" component={RapidRollScreen}/>
                 <Stack.Screen name="2048" component={Screen2048}/>
+                <Stack.Screen name="Coming Soon" component={ComingSoon}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
