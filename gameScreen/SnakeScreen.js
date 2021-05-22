@@ -7,6 +7,7 @@ import {
   Dimensions
 } from 'react-native'
 import GestureRecognizer from 'react-native-swipe-gestures';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio } from 'expo-av';
 import Snake from '../components/Snake/snake'
 import Food from '../components/Snake/food'
@@ -17,22 +18,27 @@ const BOARD_SIZE = SCREEN_WIDTH
 const BOARD_SIZE_HEIGHT = SCREEN_WIDTH - 100
 
 const randomFood = () => {
-  let max = 19, min = 0
-  let x = Math.floor((Math.random() * (max - min + 1) + min) / 5) * 5
-  let y = Math.floor((Math.random() * (max - min + 1) + min) / 5) * 5
+  let maxX = BOARD_SIZE/15 - 3, maxY = BOARD_SIZE_HEIGHT/15 - 3,min = 0
+  let x = Math.floor((Math.random() * (maxX - min + 1) + min) / 5) * 5
+  let y = Math.floor((Math.random() * (maxY - min + 1) + min) / 5) * 5
   return [x, y]
 }
 
 export default class SnakeScreen extends React.Component {
-  state = {
-    snakeDots: [
-      [3, 7],
-    ],
-    food: randomFood(),
-    direction: 'PLAY',
-    speed: 120,
-    curScore: 1,
-    highestScore: 0
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      snakeDots: [
+        [3, 7],
+      ],
+      food: randomFood(),
+      direction: 'PLAY',
+      speed: 120,
+      curScore: 1,
+      highestScore: 0
+    }
+    this.getScore()
   }
 
   
@@ -178,7 +184,7 @@ export default class SnakeScreen extends React.Component {
 
   gameOver = () => {
     const { snakeDots, highestScore } = this.state
-    
+    this.storageScore()
     Alert.alert(
       `Highest Score: ${highestScore}`,
       `Your Score: ${snakeDots.length}`, 
@@ -198,6 +204,26 @@ export default class SnakeScreen extends React.Component {
       speed: 300,
       curScore: 1
     })
+  }
+
+
+  storageScore = async () => {
+    try {
+      await AsyncStorage.setItem('SNAKE', JSON.stringify(this.state.highestScore))
+    } catch(e) {
+      console.log(e)
+    }
+  }
+  
+  getScore = async () => {
+    try {
+      const value = await AsyncStorage.getItem('SNAKE')
+      if( value != null) {
+        this.setState({ highestScore: JSON.parse(value) })
+      }
+    } catch(e) {
+      console.log(e)
+    }
   }
 
   render() {

@@ -79,6 +79,7 @@ export default class BallScreen extends Component {
                 scored: true,
                 lost: false,
             });
+            this.playSoundKick()
         }
         return false;
     }
@@ -143,7 +144,6 @@ export default class BallScreen extends Component {
                 <Emoji scored={this.state.scored} y={EMOJI_Y} lost={this.state.lost}/>
                 <TouchableWithoutFeedback onPress={(event) => {
                     this.onTap(event.nativeEvent)
-                    this.playSoundKick()
                     }}
                 >
                   <Image source={require('../img/Soccer/soccer.png')} style={[styles.ball, position, rotation]} />

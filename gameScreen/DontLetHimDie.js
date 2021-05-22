@@ -12,6 +12,7 @@ import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons';
 import { Audio } from 'expo-av';
 import Enemy from '../components/DontLetHimDie/Enemy';
 import Player from '../components/DontLetHimDie/player';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MAX_WIDTH = Dimensions.get('screen').width;
 const MAX_HEIGHT = Dimensions.get('screen').height;
@@ -33,15 +34,15 @@ export default function App() {
   const enemyLeft = [60, MAX_WIDTH-120]
   const [enemyStartLeft, setEnemyStartLeft] = useState(enemyLeft[randomE()])
   const [enemyTwoStartLeft, setEnemyTwoStartLeft] = useState(enemyLeft[randomE()])
-  const [enemyStartPos, setEnemyStartPos] = useState(-MAX_HEIGHT);
-  const [enemyTwoStartPos, setEnemyTwoStartPos] = useState(-(MAX_HEIGHT+gap));
+  const [enemyStartPos, setEnemyStartPos] = useState(-MAX_HEIGHT );
+  const [enemyTwoStartPos, setEnemyTwoStartPos] = useState(-MAX_HEIGHT - gap);
   const [enemySpeed, setEnemySpeed] = useState(9999);
 
   const [start, setStart] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false);
   let enemyTimer;
   let enemyTwoTimer;
-
+  
   //reduce speed
   useEffect(() => {
     switch(score){
@@ -143,7 +144,10 @@ export default function App() {
     clearInterval(enemyTwoTimer);
     clearInterval(enemyTimer);
     setIsGameOver(true);
-    if(score > highestScore)  setHighestScore(score)
+    if(score > highestScore)  {
+      setHighestScore(score)
+    }
+    storageScore()
   }
 
   const initiallizeGame = () => {
@@ -155,6 +159,29 @@ export default function App() {
     setEnemyStartPos(-MAX_HEIGHT)
     setEnemyTwoStartPos(-MAX_HEIGHT - gap)
   }
+
+  const storageScore = async () => {
+    try {
+      await AsyncStorage.setItem('DONTLETHIMDIE', JSON.stringify(highestScore))
+    } catch(e) {
+      console.log(e)
+    }
+  }
+  
+  const getScore = async () => {
+    try {
+      let value = await AsyncStorage.getItem('DONTLETHIMDIE')
+      if( value !== null) {
+        setHighestScore(JSON.parse(value))
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    getScore()
+  }, [])
 
   if(!isGameOver) {
     return (

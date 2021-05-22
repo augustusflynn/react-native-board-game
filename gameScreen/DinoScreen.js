@@ -2,6 +2,7 @@ import React  from 'react'
 import {Text, View, Image,TouchableOpacity, Animated, Easing, StyleSheet} from 'react-native'
 import {MaterialCommunityIcons as Icon} from 'react-native-vector-icons'
 import { Audio } from 'expo-av'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class DinoScreen extends React.Component{
   constructor(props) {
@@ -16,11 +17,12 @@ export default class DinoScreen extends React.Component{
         score: 0,
         highScore: 0
     }
+    this.getScore()
   }
 
   jump(){
     Animated.timing(this.playerYval, {
-      toValue: -150,
+      toValue: -130,
       duration: 320,
       easing: Easing.linear,
       useNativeDriver: false
@@ -32,7 +34,7 @@ export default class DinoScreen extends React.Component{
         easing: Easing.linear,
         useNativeDriver: false
       }).start()
-    }, 200)
+    }, 250)
   }
 
   async playSoundJump() {
@@ -106,11 +108,12 @@ export default class DinoScreen extends React.Component{
   checkStatus(){
     this.objXval.addListener(({value}) => {
       if(this.state.objWidth > 0){
-        if(this.playerYval._value > -40 && value >= -450 && value <= -380){
+        if(this.playerYval._value > -40 && value >= -450 && value <= -400){
           this.setState({status: 'crashed'})
           if(this.state.score > this.state.highScore){
             this.setState({highScore: this.state.score})
           }
+          this.storageScore()
         }
       }
     })
@@ -121,11 +124,29 @@ export default class DinoScreen extends React.Component{
       if(this.state.status == 'normal'){
         this.setState({score: this.state.score + 1})
       }
-    }, 500);
+    }, 400);
+  }
+
+  storageScore = async () => {
+    try {
+      await AsyncStorage.setItem('highScore', JSON.stringify(this.state.highScore))
+    } catch(e) {
+      console.log(e)
+    }
+  }
+  
+  getScore = async () => {
+    try {
+      const value = await AsyncStorage.getItem('highScore')
+      if( value != null) {
+        this.setState({ highScore: JSON.parse(value) })
+      }
+    } catch(e) {
+      console.log(e)
+    }
   }
 
   render(){
-
     if(this.state.status == 'normal'){
       return(
         <View style={styles.container} 

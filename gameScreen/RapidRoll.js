@@ -35,6 +35,7 @@ export default class RapidRollScreen extends React.Component {
       score: 0,
       highestScore: 0
     }
+    this.getScore()
   }
 
   checkCollision = () => {
@@ -91,7 +92,10 @@ export default class RapidRollScreen extends React.Component {
       isGameOver: true,
       increasing: false
     })
-    if(score > highestScore) this.setState({ highestScore: score })
+    if(score > highestScore) {
+      this.setState({ highestScore: score })
+    }
+    this.storageScore()
 
     Animated.timing(this.animatedScore, {
       toValue: -30,
@@ -275,6 +279,26 @@ export default class RapidRollScreen extends React.Component {
     }
 
     // this.speedUp()
+  }
+
+  storageScore = async () => {
+    try {
+      await AsyncStorage.setItem('RAPIDROLL', JSON.stringify(this.state.highestScore))
+      console.log('save')
+    } catch(e) {
+      console.log(e)
+    }
+  }
+  
+  getScore = async () => {
+    try {
+      let value = await AsyncStorage.getItem('RAPIDROLL')
+      if( value !== null) {
+        this.setState({ highestScore: JSON.parse(value) })
+      }
+    } catch(e) {
+      console.log(e)
+    }
   }
 
   render() {

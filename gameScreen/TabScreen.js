@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { View, Text ,StyleSheet, FlatList, TouchableOpacity, Image, Dimensions  } from 'react-native'
 import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons'
 import { Audio } from 'expo-av';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const x = Dimensions.get('screen').width
 const y = Dimensions.get('screen').height
 
@@ -63,10 +65,36 @@ export default function TabScreen() {
             setCurScore(score)
             setStatus('Lose')
         }
-        if(score > highestScore)
+        if(score > highestScore){
             setHighestScore(score)
-        
+        }
+        storageScore()
     }
+
+
+    const storageScore = async () => {
+        try {
+        await AsyncStorage.setItem('TAB', JSON.stringify(highestScore))
+        } catch(e) {
+        console.log(e)
+        }
+    }
+
+      
+    const getScore = async () => {
+        try {
+        let value = await AsyncStorage.getItem('TAB')
+        if( value !== null) {
+            setHighestScore(JSON.parse(value))
+        }
+        } catch(e) {
+        console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        getScore()
+    }, [])
 
     if(status=='Play'){
         return (

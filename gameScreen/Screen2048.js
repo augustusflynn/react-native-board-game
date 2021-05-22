@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, Alert, Dimensions } from 'react-native'
 import GestureRecognizer from 'react-native-swipe-gestures';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Screen2048 extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ export default class Screen2048 extends Component {
       highestScore: 0,
       gameLose: false
     }
+    this.getScore()
     this.addNumber()
     this.addNumber()
   }
@@ -54,18 +56,18 @@ export default class Screen2048 extends Component {
   }
 
   checkLose = () => {
-    const { grid } = this.state 
-    let bool = false
-    for(let i = 0; i < 3; i++){
-      for(let j=0;j<3;j++) {
+    const { grid } = this.state
+    for(let i = 0; i < 4; i++){
+      for(let j=0;j<4;j++) {
         if(i!=0 && grid[i-1][j] == grid[i][j])  return
-        if(i!=3 && grid[i+1][j] == grid[i][j])  return
         if(j!=0 && grid[i][j-1] == grid[i][j])  return
-        if(j!=3 && grid[i][j+1] == grid[i][j])  return
+
+        if(i!=0 && grid[j][i-1] == grid[j][i])  return
+        if(j!=0 && grid[j-1][i] == grid[j][i])  return
+
         if(grid[i][j] == 0)  return
       }
     }
-
     this.setState({ gameLose: true })
   }
 
@@ -76,6 +78,7 @@ export default class Screen2048 extends Component {
     if(newScore > highestScore) {
       this.setState({ highestScore: newScore})
     }
+    this.storageScore()
   }
 
   moveLeft = (gestureState) => {
@@ -289,6 +292,25 @@ export default class Screen2048 extends Component {
     })
   }
 
+  storageScore = async () => {
+    try {
+      await AsyncStorage.setItem('highestScore2048', JSON.stringify(this.state.highestScore))
+    } catch(e) {
+      console.log(e)
+    }
+  }
+  
+  getScore = async () => {
+    try {
+      const value = await AsyncStorage.getItem('highestScore2048')
+      if( value != null) {
+        this.setState({ highestScore: JSON.parse(value) })
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
   render() {
     const { grid, score, highestScore, gameLose } = this.state
     const config = {
@@ -345,7 +367,7 @@ export default class Screen2048 extends Component {
 
         {gameLose && (
           <TouchableOpacity activeOpacity={1} style={styles.btnLose} onPress={this.reset}> 
-            <Text style={{fontSize: 32, paddingBottom: 8, fontWeight: "bold"}}>You Loseeeeee!</Text>
+            <Text style={{fontSize: 32, paddingBottom: 8, fontWeight: "bold"}}>GAME OVER!</Text>
               <Text style={{fontSize: 18, paddingBottom: 8, fontWeight: '700'}}>Your Score is: {score}</Text>
               <Text style={{fontSize: 12, fontWeight: '500', color: '#000'}}>Press anywhere to restart game</Text>
           </TouchableOpacity>

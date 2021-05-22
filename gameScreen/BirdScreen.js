@@ -13,6 +13,7 @@ import { MaterialCommunityIcons as Icon } from "react-native-vector-icons";
 import Bird from "../components/Bird/bird";
 import Obstacles from "../components/Bird/obstacles";
 import { Audio } from 'expo-av';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function App() {
@@ -110,7 +111,6 @@ export default function App() {
     // console.log(obstaclesLeft)
     // console.log(screenWidth/2)
     // console.log(obstaclesLeft > screenWidth/2)
-    if (score > highestScore) setHighestScore(score);
     if (
       ((birdBottom < obstaclesNegHeight + obstacleHeight + 30 ||
         birdBottom > obstaclesNegHeight + obstacleHeight + gap - 30) &&
@@ -163,6 +163,10 @@ export default function App() {
     clearInterval(obstaclesTimerId);
     clearInterval(obstaclesTimerIdTwo);
     setStatus("LOSE");
+    if (score > highestScore) {
+      setHighestScore(score)
+    }
+    storageScore()
   };
 
   const initializeGame = () => {
@@ -172,6 +176,29 @@ export default function App() {
     setStatus("PLAY");
     setScore(0);
   };
+
+  const storageScore = async () => {
+    try {
+      await AsyncStorage.setItem('FLAPPYBIRD', JSON.stringify(highestScore))
+    } catch(e) {
+      console.log(e)
+    }
+  }
+  
+  const getScore = async () => {
+    try {
+      let value = await AsyncStorage.getItem('FLAPPYBIRD')
+      if( value !== null) {
+        setHighestScore(JSON.parse(value))
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(() => {
+    getScore()
+  }, [])
 
   if (status == "PLAY") {
     return (
