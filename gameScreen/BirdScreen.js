@@ -5,7 +5,6 @@ import {
   View,
   Dimensions,
   TouchableWithoutFeedback,
-  Image,
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
@@ -13,7 +12,9 @@ import { MaterialCommunityIcons as Icon } from "react-native-vector-icons";
 import Bird from "../components/Bird/bird";
 import Obstacles from "../components/Bird/obstacles";
 import { Audio } from 'expo-av';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+var axios = require('axios')
+var databaseUrl = 'https://storage-7f406-default-rtdb.asia-southeast1.firebasedatabase.app/user/userId/highScore.json'
 
 
 export default function App() {
@@ -166,7 +167,7 @@ export default function App() {
     if (score > highestScore) {
       setHighestScore(score)
     }
-    storageScore()
+    postScore()
   };
 
   const initializeGame = () => {
@@ -177,27 +178,23 @@ export default function App() {
     setScore(0);
   };
 
-  const storageScore = async () => {
-    try {
-      await AsyncStorage.setItem('FLAPPYBIRD', JSON.stringify(highestScore))
-    } catch(e) {
-      console.log(e)
-    }
-  }
-  
-  const getScore = async () => {
-    try {
-      let value = await AsyncStorage.getItem('FLAPPYBIRD')
-      if( value !== null) {
-        setHighestScore(JSON.parse(value))
-      }
-    } catch(e) {
-      console.log(e)
-    }
+  const postScore = () => {
+    fetch(databaseUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        scoreBird: highestScore
+      })
+    })
   }
 
   useEffect(() => {
-    getScore()
+    axios.get(databaseUrl)
+    .then((res) => {
+      setHighestScore(res.data.scoreBird)
+    })
   }, [])
 
   if (status == "PLAY") {

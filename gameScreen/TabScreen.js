@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { View, Text ,StyleSheet, FlatList, TouchableOpacity, Image, Dimensions  } from 'react-native'
 import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons'
 import { Audio } from 'expo-av';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const x = Dimensions.get('screen').width
 const y = Dimensions.get('screen').height
+
+var axios = require('axios')
+var databaseUrl = 'https://storage-7f406-default-rtdb.asia-southeast1.firebasedatabase.app/user/userId/highScore.json'
 
 export default function TabScreen() {
     let [time, setTime] = useState(3000)
@@ -32,6 +33,7 @@ export default function TabScreen() {
         setBlocks(blocksArr)
         setScore(0)
         setStatus('Play')
+        postScore()
     }
 
     async function playSoundPing() {
@@ -68,38 +70,32 @@ export default function TabScreen() {
         if(score > highestScore){
             setHighestScore(score)
         }
-        storageScore()
     }
-
-
-    const storageScore = async () => {
-        try {
-        await AsyncStorage.setItem('TAB', JSON.stringify(highestScore))
-        } catch(e) {
-        console.log(e)
-        }
-    }
-
       
-    const getScore = async () => {
-        try {
-        let value = await AsyncStorage.getItem('TAB')
-        if( value !== null) {
-            setHighestScore(JSON.parse(value))
-        }
-        } catch(e) {
-        console.log(e)
-        }
-    }
-
+    const postScore = () => {
+        fetch(databaseUrl, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            scoreTab: highestScore
+          })
+        })
+      }
+    
     useEffect(() => {
-        getScore()
-    }, [])
+        axios.get(databaseUrl)
+        .then((res) => {
+          setHighestScore(res.data.scoreTab)
+        })
+      }, [])
 
     if(status=='Play'){
         return (
             <View style={styles.container}>
                 <Image source={require('../img/tabtheblack/logo.png')} style={{width: 350, height: 80, top: '1%'}}/>
+                <Text style={styles.score1}>{score}</Text>
                 <View style={styles.flatlist}>
                     <FlatList 
                         renderItem={({ item }) =>
@@ -172,7 +168,15 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
-        top: '25%'
+        top: '30%',
+    },
+    score1: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        paddingTop: 10,
+        shadowColor: '#000',
+        shadowOffset: {width: -3, height: 3},
+        shadowOpacity: 0.5,
     },
     tile: {
         borderWidth: 2,

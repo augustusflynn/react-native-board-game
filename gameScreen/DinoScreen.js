@@ -1,8 +1,10 @@
 import React  from 'react'
-import {Text, View, Image,TouchableOpacity, Animated, Easing, StyleSheet} from 'react-native'
+import {Text, View,TouchableOpacity, Animated, Easing, StyleSheet} from 'react-native'
 import {MaterialCommunityIcons as Icon} from 'react-native-vector-icons'
 import { Audio } from 'expo-av'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+var axios = require('axios')
+var databaseUrl = 'https://storage-7f406-default-rtdb.asia-southeast1.firebasedatabase.app/user/userId/highScore.json'
 
 export default class DinoScreen extends React.Component{
   constructor(props) {
@@ -17,7 +19,6 @@ export default class DinoScreen extends React.Component{
         score: 0,
         highScore: 0
     }
-    this.getScore()
   }
 
   jump(){
@@ -113,7 +114,6 @@ export default class DinoScreen extends React.Component{
           if(this.state.score > this.state.highScore){
             this.setState({highScore: this.state.score})
           }
-          this.storageScore()
         }
       }
     })
@@ -127,23 +127,23 @@ export default class DinoScreen extends React.Component{
     }, 400);
   }
 
-  storageScore = async () => {
-    try {
-      await AsyncStorage.setItem('highScore', JSON.stringify(this.state.highScore))
-    } catch(e) {
-      console.log(e)
-    }
+  postScore = () => {
+    fetch(databaseUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        scoreDino: this.state.highScore
+      })
+    })
   }
   
-  getScore = async () => {
-    try {
-      const value = await AsyncStorage.getItem('highScore')
-      if( value != null) {
-        this.setState({ highScore: JSON.parse(value) })
-      }
-    } catch(e) {
-      console.log(e)
-    }
+  componentDidMount() {
+    axios.get(databaseUrl)
+    .then((res) => {
+      this.setState({ highScore: res.data.scoreDino })
+    })
   }
 
   render(){
@@ -184,6 +184,7 @@ export default class DinoScreen extends React.Component{
           <Text style={styles.highestScore}>Highest Score: {this.state.highScore} Points</Text>
           <TouchableOpacity onPress={() => {
             this.playSoundCrack()
+            this.postScore()
             setTimeout(() => {
             this.objXval.setValue(0)
             this.playerYval.setValue(0)

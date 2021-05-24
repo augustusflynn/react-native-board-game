@@ -24,6 +24,10 @@ const randomFood = () => {
   return [x, y]
 }
 
+var axios = require('axios')
+var databaseUrl = 'https://storage-7f406-default-rtdb.asia-southeast1.firebasedatabase.app/user/userId/highScore.json'
+
+
 export default class SnakeScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -38,11 +42,14 @@ export default class SnakeScreen extends React.Component {
       curScore: 1,
       highestScore: 0
     }
-    this.getScore()
   }
 
   
   componentDidMount() {
+    axios.get(databaseUrl)
+    .then((res) => {
+      this.setState({ highestScore: res.data.scoreSnake })
+    })
     setInterval(this.moveSnake, this.state.speed)
   }
 
@@ -184,7 +191,7 @@ export default class SnakeScreen extends React.Component {
 
   gameOver = () => {
     const { snakeDots, highestScore } = this.state
-    this.storageScore()
+    this.postScore()
     Alert.alert(
       `Highest Score: ${highestScore}`,
       `Your Score: ${snakeDots.length}`, 
@@ -206,24 +213,16 @@ export default class SnakeScreen extends React.Component {
     })
   }
 
-
-  storageScore = async () => {
-    try {
-      await AsyncStorage.setItem('SNAKE', JSON.stringify(this.state.highestScore))
-    } catch(e) {
-      console.log(e)
-    }
-  }
-  
-  getScore = async () => {
-    try {
-      const value = await AsyncStorage.getItem('SNAKE')
-      if( value != null) {
-        this.setState({ highestScore: JSON.parse(value) })
-      }
-    } catch(e) {
-      console.log(e)
-    }
+  postScore = () => {
+    fetch(databaseUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        scoreSnake: this.state.highestScore
+      })
+    })
   }
 
   render() {

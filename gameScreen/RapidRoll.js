@@ -12,6 +12,10 @@ const getRandomLeft = () => {
   return Math.floor(Math.random() * (max - min) + min)
 }
 
+var axios = require('axios')
+var databaseUrl = 'https://storage-7f406-default-rtdb.asia-southeast1.firebasedatabase.app/user/userId/highScore.json'
+
+
 export default class RapidRollScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -35,7 +39,6 @@ export default class RapidRollScreen extends React.Component {
       score: 0,
       highestScore: 0
     }
-    this.getScore()
   }
 
   checkCollision = () => {
@@ -61,6 +64,10 @@ export default class RapidRollScreen extends React.Component {
   }
 
   componentDidMount() {
+    axios.get(databaseUrl)
+    .then((res) => {
+      this.setState({ highestScore: res.data.scoreRapidRoll })
+    })
     setInterval(() => {this.startGame() , this.doIncreasing()}, 1000/50)
   }
 
@@ -95,7 +102,8 @@ export default class RapidRollScreen extends React.Component {
     if(score > highestScore) {
       this.setState({ highestScore: score })
     }
-    this.storageScore()
+
+    this.postScore()
 
     Animated.timing(this.animatedScore, {
       toValue: -30,
@@ -281,24 +289,16 @@ export default class RapidRollScreen extends React.Component {
     // this.speedUp()
   }
 
-  storageScore = async () => {
-    try {
-      await AsyncStorage.setItem('RAPIDROLL', JSON.stringify(this.state.highestScore))
-      console.log('save')
-    } catch(e) {
-      console.log(e)
-    }
-  }
-  
-  getScore = async () => {
-    try {
-      let value = await AsyncStorage.getItem('RAPIDROLL')
-      if( value !== null) {
-        this.setState({ highestScore: JSON.parse(value) })
-      }
-    } catch(e) {
-      console.log(e)
-    }
+  postScore = () => {
+    fetch(databaseUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        scoreRapidRoll: this.state.highestScore
+      })
+    })
   }
 
   render() {

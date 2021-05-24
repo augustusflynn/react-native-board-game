@@ -12,7 +12,9 @@ import { MaterialCommunityIcons as Icon } from 'react-native-vector-icons';
 import { Audio } from 'expo-av';
 import Enemy from '../components/DontLetHimDie/Enemy';
 import Player from '../components/DontLetHimDie/player';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+var axios = require('axios')
+var databaseUrl = 'https://storage-7f406-default-rtdb.asia-southeast1.firebasedatabase.app/user/userId/highScore.json'
 
 const MAX_WIDTH = Dimensions.get('screen').width;
 const MAX_HEIGHT = Dimensions.get('screen').height;
@@ -147,7 +149,7 @@ export default function App() {
     if(score > highestScore)  {
       setHighestScore(score)
     }
-    storageScore()
+    postScore()
   }
 
   const initiallizeGame = () => {
@@ -160,27 +162,24 @@ export default function App() {
     setEnemyTwoStartPos(-MAX_HEIGHT - gap)
   }
 
-  const storageScore = async () => {
-    try {
-      await AsyncStorage.setItem('DONTLETHIMDIE', JSON.stringify(highestScore))
-    } catch(e) {
-      console.log(e)
-    }
-  }
-  
-  const getScore = async () => {
-    try {
-      let value = await AsyncStorage.getItem('DONTLETHIMDIE')
-      if( value !== null) {
-        setHighestScore(JSON.parse(value))
-      }
-    } catch(e) {
-      console.log(e)
-    }
+
+  const postScore = () => {
+    fetch(databaseUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        scoreDontLetHimDie: highestScore
+      })
+    })
   }
 
   useEffect(() => {
-    getScore()
+    axios.get(databaseUrl)
+    .then((res) => {
+      setHighestScore(res.data.scoreDontLetHimDie)
+    })
   }, [])
 
   if(!isGameOver) {

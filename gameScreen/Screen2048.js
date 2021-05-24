@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, TouchableOpacity, Alert, Dimensions } from 'react-native'
 import GestureRecognizer from 'react-native-swipe-gestures';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+const axios = require('axios');
+var databaseUrl = 'https://storage-7f406-default-rtdb.asia-southeast1.firebasedatabase.app/user/userId/highScore.json'
 
 export default class Screen2048 extends Component {
   constructor(props) {
@@ -17,7 +20,6 @@ export default class Screen2048 extends Component {
       highestScore: 0,
       gameLose: false
     }
-    this.getScore()
     this.addNumber()
     this.addNumber()
   }
@@ -78,7 +80,6 @@ export default class Screen2048 extends Component {
     if(newScore > highestScore) {
       this.setState({ highestScore: newScore})
     }
-    this.storageScore()
   }
 
   moveLeft = (gestureState) => {
@@ -290,26 +291,29 @@ export default class Screen2048 extends Component {
       this.addNumber()
       this.addNumber()
     })
+    this.postScore()
   }
 
-  storageScore = async () => {
-    try {
-      await AsyncStorage.setItem('highestScore2048', JSON.stringify(this.state.highestScore))
-    } catch(e) {
-      console.log(e)
-    }
+  postScore = () => {
+    fetch(databaseUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        score2048: this.state.highestScore
+      })
+    })
   }
-  
-  getScore = async () => {
-    try {
-      const value = await AsyncStorage.getItem('highestScore2048')
-      if( value != null) {
-        this.setState({ highestScore: JSON.parse(value) })
-      }
-    } catch(e) {
-      console.log(e)
-    }
+
+  componentDidMount() {
+    axios.get(databaseUrl)
+    .then((res) => {
+      console.log(res.data.score2048)
+      this.setState({ highestScore: res.data.score2048 })
+    })
   }
+
 
   render() {
     const { grid, score, highestScore, gameLose } = this.state
